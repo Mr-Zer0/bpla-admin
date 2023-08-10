@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  build: {
+    transpile: ["@headlessui/vue"]
+  },
   pages: true,
   css: ['~/assets/css/main.css'],
   postcss: {
@@ -23,7 +26,7 @@ export default defineNuxtConfig({
         },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap'
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap'
         }
       ]
     }
