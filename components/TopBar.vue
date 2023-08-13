@@ -1,5 +1,5 @@
 <template>
-    <Disclosure as="nav" class="bg-white shadow" v-slot="{ open }">
+    <Disclosure as="header" class="bg-white shadow" v-slot="{ open }">
       <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div class="relative flex h-16 items-stretch justify-between">
           <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -83,9 +83,9 @@
   import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
   
   const navigation = [
-    { name: 'Home', href: '#', current: true },
+    { name: 'Home', href: '/', current: true },
     { name: 'Categories', href: '#', current: false },
-    { name: 'Posts', href: '#', current: false },
+    { name: 'Posts', href: '/posts', current: false },
     { name: 'Gallery', href: '#', current: false },
     { name: 'Settings', href: '#', current: false }
   ]
