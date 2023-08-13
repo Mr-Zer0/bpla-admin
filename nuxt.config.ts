@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import bpla from './bpla.config'
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   build: {
@@ -14,6 +16,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      title: bpla.name_short,
       link: [
         {
           rel: 'preconnect',
