@@ -6,7 +6,7 @@
         v-for="(action, i) in actions"
         :key="i"
         href="#"
-        class="border border-solid border-gray-300 rounded-lg bg-white p-4 hover:bg-white/[.75] text-slate-600 hover:text-slate-800"
+        class="border border-solid border-slate-300 rounded-lg bg-white p-4 hover:bg-white/[.75] text-slate-600 hover:text-slate-800"
       >
         <component :is="action.icon" class="w-7 h7" />
         <h5 v-text="action.name" class="font-bold mt-5" />
