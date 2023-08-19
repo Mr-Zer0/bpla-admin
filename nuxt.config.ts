@@ -14,6 +14,15 @@ export default defineNuxtConfig({
       autoprefixer: {}
     }
   },
+  modules: [
+    '@pinia/nuxt'
+  ],
+  pinia: {
+    autoImports: [
+      'defineStore',
+      ['defineStore', 'definePiniaStore']
+    ]
+  },
   app: {
     head: {
       title: bpla.name_short,
