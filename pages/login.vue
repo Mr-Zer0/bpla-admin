@@ -1,6 +1,6 @@
 <template>
   <main class="bg-slate-100 h-screen flex items-center justify-center">
-    <div class="w-full md:w-1/2 md:max-w-md mx-5 bg-white p-7 md:p-10 rounded-lg shadow space-y-6">
+    <form @submit.prevent="login" class="w-full md:w-1/2 md:max-w-md mx-5 bg-white p-7 md:p-10 rounded-lg shadow space-y-6">
       <div>
         <label
           for="email"
@@ -45,6 +45,7 @@
             name="remember"
             id="remember"
             class="w-4 h-4 rounded"
+            checked
           >
           <label for="remember" class="ml-2 text-sm">
             Remember Me
@@ -65,12 +66,12 @@
           Sign in
         </button>
       </div>
-    </div>
+    </form>
   </main>
 </template>
 
 <script setup lang="ts">
-import { signIn } from '@/composables/useFireauth'
+import { signIn, signOut } from '@/composables/useFireauth'
 
 definePageMeta({
   layout: 'plain'
@@ -83,5 +84,9 @@ const login = async () => {
   const credential = await signIn(email, password)
 
   console.log(credential)
+}
+
+const logout = async () => {
+  await signOut()
 }
 </script>
