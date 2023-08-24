@@ -44,16 +44,6 @@ export const signIn = async (email: string, password: string) => {
     const errorMessage = error.message
   })
 
-  const userState = useUser()
-
-  onAuthStateChanged(auth, (user) => {
-    console.log('user : ', user)
-
-    if (user) {
-      userState.value = user
-    }
-  })
-
   return credentials
 }
 
@@ -63,7 +53,7 @@ export const signIn = async (email: string, password: string) => {
  */
 export const signOut = async () => {
   const auth = getAuth()
-  const result = auth.signOut()
+  const result = await auth.signOut()
 
   return result
 }
