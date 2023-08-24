@@ -80,13 +80,5 @@ definePageMeta({
 let email = ''
 let password = ''
 
-const login = async () => {
-  const credential = await signIn(email, password)
-
-  console.log(credential)
-}
-
-const logout = async () => {
-  await signOut()
-}
+const login = async () => { await signIn(email, password) }
 </script>

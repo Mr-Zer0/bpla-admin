@@ -5,5 +5,7 @@ export default defineNuxtPlugin(nuxtApp => {
     apiKey: "AIzaSyDH8Xv8YYDe4vCl-Qv_sbJ48YMYeriwBec"
   }
 
-  const app = initializeApp(firebaseConfig)
+  initializeApp(firebaseConfig)
+
+  initAuth()
 })
