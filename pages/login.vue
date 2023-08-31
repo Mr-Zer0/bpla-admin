@@ -59,7 +59,6 @@
 
       <div>
         <button
-          @click="login"
           type="submit"
           class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
@@ -70,15 +69,26 @@
   </main>
 </template>
 
-<script setup lang="ts">
-import { signIn, signOut } from '@/composables/useFireauth'
+
+
+<script lang="ts">
+import { signIn, signOut, currentUser } from '@/composables/useFireauth'
 
 definePageMeta({
   layout: 'plain'
 })
 
-let email = ''
-let password = ''
-
-const login = async () => { await signIn(email, password) }
+export default {
+  data: () => {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  methods: {
+    async login() {
+      await signIn(this.email, this.password)
+    }
+  }
+}
 </script>

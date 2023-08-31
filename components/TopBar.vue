@@ -16,7 +16,7 @@
               <img class="h-8 w-auto" src="Logo.svg" alt="Your Company" />
             </div>
             <div class="hidden sm:flex sm:ml-6 space-x-4">
-                <a 
+                <a
                     v-for="item in navigation"
                     :key="item.name"
                     :href="item.href"
@@ -24,6 +24,13 @@
                     :aria-current="item.current ? 'page' : undefined"
                 >
                     {{ item.name }}
+                </a>
+
+                <a
+                    @click="logout"
+                    class="text-gray-500 border-transparent hover:text-gray-700 hover:border-b-gray-300', 'border-b-2 border-solid pt-2 px-3 inline-flex items-center text-sm font-medium"
+                >
+                    Logout
                 </a>
             </div>
           </div>
@@ -33,7 +40,7 @@
               <span class="sr-only">View notifications</span>
               <BellIcon class="h-6 w-6" aria-hidden="true" />
             </button> -->
-  
+
             <!-- Profile dropdown -->
             <Menu as="div" class="relative ml-3">
               <div>
@@ -60,14 +67,14 @@
           </div>
         </div>
       </div>
-  
+
       <DisclosurePanel class="sm:hidden">
         <div class="space-y-1 pb-3 pt-2">
-            <DisclosureButton 
+            <DisclosureButton
                 v-for="item in navigation"
                 :key="item.name"
                 as="a"
-                :href="item.href" 
+                :href="item.href"
                 :class="[item.current ? 'border-l-4 bg-primary/[.06] border-solid border-primary' : 'text-gray-500 hover:bg-gray-400/[.06] border-transparent hover:border-l-gray-400', 'block px-4 py-2 text-base font-medium border-l-4 border-solid']"
                 :aria-current="item.current ? 'page' : undefined"
             >
@@ -77,16 +84,21 @@
       </DisclosurePanel>
     </Disclosure>
   </template>
-  
+
   <script setup>
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-  
+
   const navigation = [
     { name: 'Home', href: '/', current: true },
     { name: 'Categories', href: '#', current: false },
     { name: 'Posts', href: '/posts', current: false },
     { name: 'Gallery', href: '#', current: false },
-    { name: 'Settings', href: '#', current: false }
+    { name: 'Settings', href: '#', current: false },
+    { name: 'Login', href: '/login', current: false }
   ]
+
+const logout = async () => {
+  await signOut()
+}
   </script>

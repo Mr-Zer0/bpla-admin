@@ -5,16 +5,12 @@ import {
   onAuthStateChanged
 } from "firebase/auth"
 
-import { useUserStore } from '@/store/user';
+export const currentUser = () => {
+  return new Promise((resolve, reject) => {
 
-/**
- * Initialize and watch the authentication state
- */
-export const initAuth = async () => {
-  const userStore = useUserStore()
-
-  onAuthStateChanged(getAuth(), (user) => {
-    userStore.change(user)
+    onAuthStateChanged(getAuth(), (user) => {
+      resolve(user)
+    }, reject)
   })
 }
 
