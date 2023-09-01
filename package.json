@@ -12,6 +12,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.16",
+    "@heroicons/vue": "^2.0.18",
     "firebase": "^10.3.1",
     "pinia": "^2.1.6",
     "vue": "^3.3.4",
