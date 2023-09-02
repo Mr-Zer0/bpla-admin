@@ -1,5 +1,19 @@
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from './index.js'
+import { useAuthStore } from '@/stores/auth.js'
+import type { Auth } from 'firebase/auth'
+
+let auth:Auth
+
+export const init = (authValue:Auth) => {
+  auth = authValue
+
+  onAuthStateChanged(auth, (user) => {
+    const authStore = useAuthStore()
+    authStore.user = user
+
+    console.log('Auth state has changed : ', user)
+  })
+}
 
 /**
  * Get current logged in user from firebase
@@ -10,6 +24,8 @@ export const currentUser = () => {
     onAuthStateChanged(
       auth,
       (user) => {
+        console.log('Auth state changed : ', user)
+
         resolve(user)
       },
       reject
