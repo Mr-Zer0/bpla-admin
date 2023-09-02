@@ -1,6 +1,10 @@
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from './index.js'
 
+/**
+ * Get current logged in user from firebase
+ * @returns Promise
+ */
 export const currentUser = () => {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(
@@ -24,6 +28,8 @@ export const signIn = async (email: string, password: string) => {
     const errorCode = error.code
     const errorMessage = error.message
   })
+
+  console.log('Logged in : ', credentials)
 
   return credentials
 }
