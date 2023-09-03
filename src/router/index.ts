@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
+import { currentUser } from '@/firebase/fireauth'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +26,24 @@ const router = createRouter({
       component: LoginView
     }
   ]
+})
+
+router.beforeEach(async (to) => {
+  console.log('!! Routher loaded !!')
+
+  const authStore = useAuthStore()
+
+  const user = authStore.user ? authStore.user : await currentUser()
+
+  if (to.path === '/login') {
+    if (user) {
+      return { name: 'home' }
+    }
+  } else {
+    if (!user) {
+      return { name: 'login' }
+    }
+  }
 })
 
 export default router

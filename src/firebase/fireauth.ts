@@ -1,19 +1,7 @@
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { useAuthStore } from '@/stores/auth.js'
-import type { Auth } from 'firebase/auth'
-
-let auth:Auth
-
-export const init = (authValue:Auth) => {
-  auth = authValue
-
-  onAuthStateChanged(auth, (user) => {
-    const authStore = useAuthStore()
-    authStore.user = user
-
-    console.log('Auth state has changed : ', user)
-  })
-}
+import { auth } from './index'
+import { FirebaseError } from 'firebase/app'
 
 /**
  * Get current logged in user from firebase
@@ -25,6 +13,9 @@ export const currentUser = () => {
       auth,
       (user) => {
         console.log('Auth state changed : ', user)
+
+        const authStore = useAuthStore()
+        authStore.user = user
 
         resolve(user)
       },
@@ -40,14 +31,17 @@ export const currentUser = () => {
  * @returns UserCredentialImpl
  */
 export const signIn = async (email: string, password: string) => {
-  const credentials = await signInWithEmailAndPassword(auth, email, password).catch((error) => {
-    const errorCode = error.code
-    const errorMessage = error.message
-  })
+  try {
+    await signInWithEmailAndPassword(auth, email, password)
 
-  console.log('Logged in : ', credentials)
-
-  return credentials
+    return { success: true }
+  } catch(error) {
+    return {
+      success: false,
+      errorCode: error instanceof FirebaseError ? error.code : String(error),
+      errorMessage: error instanceof FirebaseError ? error.message : String(error)
+    }
+  }
 }
 
 /**
@@ -55,6 +49,8 @@ export const signIn = async (email: string, password: string) => {
  * @returns boolean
  */
 export const signOut = async () => {
+  console.log('Signing out')
+
   const result = await auth.signOut()
 
   return result

@@ -32,19 +32,11 @@
             >
               {{ item.name }}
             </a>
-
-            <a
-              @click="logout"
-              class="text-gray-500 border-transparent hover:text-gray-700 hover:border-b-gray-300', 'border-b-2 border-solid pt-2 px-3 inline-flex items-center text-sm font-medium"
-            >
-              Logout
-            </a>
           </div>
         </div>
         <div
           class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
         >
-
           <!-- Profile dropdown -->
           <Menu as="div" class="relative ml-3">
             <div>
@@ -89,8 +81,10 @@
                   <a
                     href="#"
                     :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
-                    >Sign out</a
-                  >
+                    @click.prevent="logout"
+                    >
+                    Sign out
+                  </a>
                 </MenuItem>
               </MenuItems>
             </transition>
@@ -121,7 +115,7 @@
   </Disclosure>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
   Disclosure,
   DisclosureButton,
@@ -132,16 +126,20 @@ import {
   MenuItems
 } from '@headlessui/vue'
 
+import { signOut } from '@/firebase/fireauth';
+import router from '@/router';
+
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'Categories', href: '#', current: false },
   { name: 'Posts', href: '/posts', current: false },
   { name: 'Gallery', href: '#', current: false },
-  { name: 'Settings', href: '#', current: false },
-  { name: 'Login', href: '/login', current: false }
+  { name: 'Settings', href: '#', current: false }
 ]
 
-const logout = async () => {
+async function logout() {
   await signOut()
+
+  router.push('/login')
 }
 </script>

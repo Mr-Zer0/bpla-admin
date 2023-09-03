@@ -2,9 +2,9 @@
   <main class="flex items-center justify-center min-h-screen">
     <form
       @submit.prevent="login"
-      class="w-full md:w-1/2 md:max-w-md mx-5 bg-white p-7 md:p-10 rounded-lg shadow space-y-6"
+      class="w-full md:w-1/2 md:max-w-md mx-5 bg-white py-7 md:py-10 rounded-lg shadow space-y-6 shake"
     >
-    <div>
+      <div class="px-7 md:px-10">
         <label
           for="email"
           class="block text-sm font-medium leading-6 text-gray-900"
@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="px-7 md:px-10">
         <label for="password" class="block text-sm font-medium leading-6 text-gray-900">
           Password
         </label>
@@ -41,7 +41,14 @@
         </div>
       </div>
 
-      <div class="flex justify-between">
+      <div class="bg-gray-100 py-5 px-7 md:px-10">
+        <p class="text-center flex justify-center text-gray-700">
+          <ExclamationTriangleIcon class="w-6 mr-3 text-red-800" />
+          Username or password is incorrect.
+        </p>
+      </div>
+
+      <div class="flex justify-between px-7 md:px-10">
         <div class="flex items-center">
           <input
             type="checkbox"
@@ -60,7 +67,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="px-7 md:px-10">
         <button
           type="submit"
           class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -74,11 +81,46 @@
 
 <script setup lang="ts">
 import { signIn } from '@/firebase/fireauth'
+import router from '@/router';
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
 
 let email = ''
 let password = ''
 
 async function login() {
-  await signIn(email, password)
+  const result = await signIn(email, password)
+
+  if(result.success) {
+    return router.push('/')
+  }
 }
 </script>
+
+<style scope>
+/* .shake {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+} */
+</style>
