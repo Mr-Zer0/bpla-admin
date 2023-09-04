@@ -1,8 +1,6 @@
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { useAuthStore } from '@/stores/auth.js'
 import { auth } from './index'
-import { FirebaseError } from 'firebase/app'
-import { ref } from 'vue'
 
 /**
  * Get current logged in user from firebase
@@ -13,8 +11,6 @@ export const currentUser = () => {
     onAuthStateChanged(
       auth,
       (user) => {
-        console.log('Auth state changed : ', user)
-
         const authStore = useAuthStore()
         authStore.user = user
 

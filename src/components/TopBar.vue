@@ -129,6 +129,8 @@ import {
 import { signOut } from '@/firebase/fireauth';
 import router from '@/router';
 
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
+
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'Categories', href: '#', current: false },
