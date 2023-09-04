@@ -2,7 +2,7 @@
   <main class="flex items-center justify-center min-h-screen">
     <form
       @submit.prevent="login"
-      class="w-full md:w-1/2 md:max-w-md mx-5 bg-white py-7 md:py-10 rounded-lg shadow space-y-6 shake"
+      :class="[state.error ? 'shake' : '', 'w-full md:w-1/2 md:max-w-md mx-5 bg-white py-7 md:py-10 rounded-lg shadow space-y-6']"
     >
       <div class="px-7 md:px-10">
         <label
@@ -41,10 +41,13 @@
         </div>
       </div>
 
-      <div class="bg-gray-100 py-5 px-7 md:px-10">
+      <div
+        v-if="state.error"
+        class="bg-gray-100 py-5 px-7 md:px-10"
+      >
         <p class="text-center flex justify-center text-gray-700">
           <ExclamationTriangleIcon class="w-6 mr-3 text-red-800" />
-          Username or password is incorrect.
+          {{ state.error }}
         </p>
       </div>
 
@@ -83,21 +86,45 @@
 import { signIn } from '@/firebase/fireauth'
 import router from '@/router';
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
+import { FirebaseError } from 'firebase/app'
+import { reactive } from 'vue';
 
 let email = ''
 let password = ''
 
-async function login() {
-  const result = await signIn(email, password)
+const state = reactive({ 
+  error: ''
+})
 
-  if(result.success) {
+async function login() {
+  state.error = ''
+
+  try {
+
+    await signIn(email, password)
     return router.push('/')
+
+  } catch (error) {
+
+    const code = error instanceof FirebaseError ? error.code : String(error)
+    const message = error instanceof FirebaseError ? error.message : String(error)
+
+    console.warn('Error : ', message)
+
+    if (code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+      state.error = 'Username or password is incorrect.'
+    } else if (code === 'auth/too-many-requests') {
+      state.error = 'Too many attemps.'
+    } else {
+      state.error = 'Authentication fail. Try Again.'
+    }
+    
   }
 }
 </script>
 
 <style scope>
-/* .shake {
+.shake {
   animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform: translate3d(0, 0, 0);
 }
@@ -122,5 +149,5 @@ async function login() {
   60% {
     transform: translate3d(4px, 0, 0);
   }
-} */
+}
 </style>

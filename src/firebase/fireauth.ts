@@ -2,6 +2,7 @@ import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { useAuthStore } from '@/stores/auth.js'
 import { auth } from './index'
 import { FirebaseError } from 'firebase/app'
+import { ref } from 'vue'
 
 /**
  * Get current logged in user from firebase
@@ -31,17 +32,7 @@ export const currentUser = () => {
  * @returns UserCredentialImpl
  */
 export const signIn = async (email: string, password: string) => {
-  try {
-    await signInWithEmailAndPassword(auth, email, password)
-
-    return { success: true }
-  } catch(error) {
-    return {
-      success: false,
-      errorCode: error instanceof FirebaseError ? error.code : String(error),
-      errorMessage: error instanceof FirebaseError ? error.message : String(error)
-    }
-  }
+  await signInWithEmailAndPassword(auth, email, password)
 }
 
 /**
