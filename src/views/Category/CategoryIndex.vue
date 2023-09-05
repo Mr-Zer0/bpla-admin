@@ -6,20 +6,21 @@
       <article
         v-for="(cat, i) in categories"
         :key="i"
-        :class="[i === categories.length - 1 ? '' : 'border-b border-solid border-slate-200', 'px-5 py-3']"
+        :class="[i === categories.length - 1 ? '' : 'border-b border-solid border-slate-200', 'px-5 py-3 flex justify-between']"
       >
 
-        <div>
-          <h3 v-text="cat.name" class="text-lg" />
-          <div class="flex flex-row items-center gap-3 text-slate-500 mt-5 font-light">
-            <CalendarIcon class="w-4 h-4" />
-            <time datetime="{{ cat.created }}" class="text-sm">
-              {{ cat.created }}
-            </time>
+        <div class="flex items-center gap-x-2.5">
+          <h3 v-text="cat.name" class="text-lg font-semibold" />
+          <p
+            :class="[cat.status === 'drafted' ? 'text-slate-400' : 'text-green-600', 'text-xs uppercase font-semibold mt-1']"
+            v-text="cat.status"
+          />
+        </div>
 
-            <TagIcon class="w-4 h-4 ml-4" />
-            <p v-text="cat.status" class="text-sm" />
-          </div>
+        <div>
+          <a href="#">
+            <PencilSquareIcon class="w-6 text-slate-500 hover:text-slate-700" />
+          </a>
         </div>
 
       </article>
@@ -30,6 +31,20 @@
 
 <script setup lang="ts">
 import TopBar from '../../components/TopBar.vue'
+import { PencilSquareIcon } from '@heroicons/vue/24/outline';
+
+import { db } from '@/firebase';
+import { collection, getDocs } from 'firebase/firestore';
+
+const categoryCollection = async () => {
+  const querySnapshot = await getDocs(collection(db, 'category'))
+
+  querySnapshot.forEach((doc) => {
+    console.log(doc)
+  })
+}
+
+categoryCollection()
 
 const categories = [
   {

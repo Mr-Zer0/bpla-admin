@@ -18,10 +18,10 @@
             <img class="h-8 w-auto" src="@/assets/logo.svg" alt="Burma People's Libration Army" />
           </div>
           <div class="hidden sm:flex sm:ml-6 space-x-4">
-            <a
+            <router-link
               v-for="item in navigation"
               :key="item.name"
-              :href="item.href"
+              :to="item.href"
               :class="[
                 item.current
                   ? 'border-b-2 border-b-primary'
@@ -31,7 +31,7 @@
               :aria-current="item.current ? 'page' : undefined"
             >
               {{ item.name }}
-            </a>
+          </router-link>
           </div>
         </div>
         <div
@@ -133,7 +133,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
-  { name: 'Categories', href: '#', current: false },
+  { name: 'Categories', href: '/categories', current: false },
   { name: 'Posts', href: '/posts', current: false },
   { name: 'Gallery', href: '#', current: false },
   { name: 'Settings', href: '#', current: false }
