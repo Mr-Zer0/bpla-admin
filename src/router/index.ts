@@ -35,7 +35,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  console.log('!! Routher loaded !!')
+  console.log(' ===! Routher loaded !===')
 
   const authStore = useAuthStore()
 
