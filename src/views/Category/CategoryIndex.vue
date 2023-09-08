@@ -35,38 +35,52 @@ import { PencilSquareIcon } from '@heroicons/vue/24/outline';
 
 import { db } from '@/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import type { Timestamp } from "firebase/firestore"
+
+type Categories = {
+  name: string|undefined,
+  slug: string|undefined,
+  description: string|undefined,
+  status: string|undefined,
+  created: Timestamp|undefined,
+  modified: Timestamp|undefined
+}
+
+const categories:Array<Categories> = [
+  // {
+  //   name: 'Category Name 1',
+  //   slug: 'category-name-1',
+  //   status: 'published',
+  //   description: 'The description for category name 1',
+  //   created: '4 September 2023 at 10:18:15 UTC+6:30'
+  // },
+  // {
+  //   name: 'Category Name 2',
+  //   slug: 'category-name-2',
+  //   status: 'drafted',
+  //   description: 'The description for category name 2',
+  //   created: '4 September 2023 at 10:18:15 UTC+6:30'
+  // },
+  // {
+  //   name: 'Category Name 3',
+  //   slug: 'category-name-3',
+  //   status: 'published',
+  //   description: 'The description for category name 3',
+  //   created: '4 September 2023 at 10:18:15 UTC+6:30'
+  // }
+]
 
 const categoryCollection = async () => {
   const querySnapshot = await getDocs(collection(db, 'category'))
 
   querySnapshot.forEach((doc) => {
-    console.log(doc)
+    console.log(doc.data())
+
+    const docData:Categories = doc.data()
+
+    categories.push(doc.data())
   })
 }
 
 categoryCollection()
-
-const categories = [
-  {
-    name: 'Category Name 1',
-    slug: 'category-name-1',
-    status: 'published',
-    description: 'The description for category name 1',
-    created: '4 September 2023 at 10:18:15 UTC+6:30'
-  },
-  {
-    name: 'Category Name 2',
-    slug: 'category-name-2',
-    status: 'drafted',
-    description: 'The description for category name 2',
-    created: '4 September 2023 at 10:18:15 UTC+6:30'
-  },
-  {
-    name: 'Category Name 3',
-    slug: 'category-name-3',
-    status: 'published',
-    description: 'The description for category name 3',
-    created: '4 September 2023 at 10:18:15 UTC+6:30'
-  }
-]
 </script>
