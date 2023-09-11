@@ -1,6 +1,10 @@
 <template>
   <TopBar />
+
   <main class="mx-auto my-8 max-w-7xl px-2 sm:px-6 lg:px-8">
+
+    <button @click="create()">Add New</button>
+
     <section class="bg-white mt-8 rounded-lg border border-solid border-slate-200">
       
       <article
@@ -32,55 +36,41 @@
 <script setup lang="ts">
 import TopBar from '../../components/TopBar.vue'
 import { PencilSquareIcon } from '@heroicons/vue/24/outline';
+import { add, getAll } from '@/firebase/firestore'
+import type CategoryContract from '@/contracts/category.interface'
+import { onMounted, ref } from 'vue';
 
-import { db } from '@/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import type { Timestamp } from "firebase/firestore"
+const categories = ref<Array<CategoryContract>>([])
 
-type Categories = {
-  name: string|undefined,
-  slug: string|undefined,
-  description: string|undefined,
-  status: string|undefined,
-  created: Timestamp|undefined,
-  modified: Timestamp|undefined
+const create = async (): Promise<void> => {
+  const result = await add(
+    'category',
+    {
+      name: 'Messages',
+      slug: 'messages',
+      description: 'All about messages from BPLA',
+      status: 'drafted'
+    }
+  )
+
+  console.log(result)
 }
 
-const categories:Array<Categories> = [
-  // {
-  //   name: 'Category Name 1',
-  //   slug: 'category-name-1',
-  //   status: 'published',
-  //   description: 'The description for category name 1',
-  //   created: '4 September 2023 at 10:18:15 UTC+6:30'
-  // },
-  // {
-  //   name: 'Category Name 2',
-  //   slug: 'category-name-2',
-  //   status: 'drafted',
-  //   description: 'The description for category name 2',
-  //   created: '4 September 2023 at 10:18:15 UTC+6:30'
-  // },
-  // {
-  //   name: 'Category Name 3',
-  //   slug: 'category-name-3',
-  //   status: 'published',
-  //   description: 'The description for category name 3',
-  //   created: '4 September 2023 at 10:18:15 UTC+6:30'
-  // }
-]
-
-const categoryCollection = async () => {
-  const querySnapshot = await getDocs(collection(db, 'category'))
+onMounted(async () => {
+  const querySnapshot = await getAll('category')
 
   querySnapshot.forEach((doc) => {
-    console.log(doc.data())
+    const data = doc.data()
 
-    const docData:Categories = doc.data()
-
-    categories.push(doc.data())
+    categories.value.push({
+      name: data.name,
+      slug: data.slug,
+      description: data.description,
+      status: data.status,
+      created: data.created,
+      modified: data.modified
+    })
   })
-}
+})
 
-categoryCollection()
 </script>
