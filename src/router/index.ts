@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import CategoryIndex from '@/views/Category/CategoryIndex.vue'
+import CategoryCreate from '@/views/Category/CategoryCreate.vue'
+import CategoryHome from '@/views/Category/CategoryHome.vue'
 import { currentUser } from '@/firebase/fireauth'
 import { useAuthStore } from '@/stores/auth'
 
@@ -29,7 +31,19 @@ const router = createRouter({
     {
       path: '/categories',
       name: 'categories',
-      component: CategoryIndex
+      component: CategoryIndex,
+      children: [
+        {
+          path: '',
+          name: 'categories.home',
+          component: CategoryHome
+        },
+        {
+          path: 'create',
+          name: 'categories.create',
+          component: CategoryCreate
+        }
+      ]
     }
   ]
 })
