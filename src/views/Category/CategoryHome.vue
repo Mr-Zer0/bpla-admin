@@ -45,25 +45,11 @@
 <script setup lang="ts">
 import TopBar from '../../components/TopBar.vue'
 import { PencilSquareIcon } from '@heroicons/vue/24/outline';
-import { add, getAll } from '@/firebase/firestore'
+import { getAll } from '@/firebase/firestore'
 import type CategoryContract from '@/contracts/category.interface'
 import { onMounted, ref } from 'vue';
 
 const categories = ref<Array<CategoryContract>>([])
-
-const create = async (): Promise<void> => {
-  const result = await add(
-    'category',
-    {
-      name: 'Messages',
-      slug: 'messages',
-      description: 'All about messages from BPLA',
-      status: 'drafted'
-    }
-  )
-
-  console.log(result)
-}
 
 onMounted(async () => {
   const querySnapshot = await getAll('category')
