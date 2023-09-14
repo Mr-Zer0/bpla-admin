@@ -95,6 +95,7 @@
 <script setup lang="ts">
 import TopBar from '@/components/TopBar.vue'
 import { add } from '@/firebase/firestore'
+import router from '@/router';
 
 let name = ''
 let slug = ''
@@ -104,7 +105,7 @@ let status = 'Published'
 const submit = async () => {
   console.log('Name : ', name, 'Slug : ', slug, 'Description : ', description, 'Status : ', status)
 
-  const result = await add('categories', {
+  const result = await add('category', {
     name: name,
     slug: slug,
     description: description,
@@ -112,6 +113,8 @@ const submit = async () => {
   })
 
   console.log(result)
+
+  return router.push('/categories')
 }
 
 const draft = async () => {
