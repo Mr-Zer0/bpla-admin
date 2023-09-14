@@ -131,9 +131,13 @@ import router from '@/router';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 
+console.log(router.currentRoute.value.fullPath)
+
+const path = router.currentRoute.value.fullPath
+
 const navigation = [
-  { name: 'Home', href: '/', current: true },
-  { name: 'Categories', href: '/categories', current: false },
+  { name: 'Home', href: '/', current: path === '/' },
+  { name: 'Categories', href: '/categories', current: path.startsWith('/categories') },
   { name: 'Posts', href: '#', current: false },
   { name: 'Gallery', href: '#', current: false },
   { name: 'Settings', href: '#', current: false }
