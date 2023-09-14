@@ -138,7 +138,7 @@ const path = router.currentRoute.value.fullPath
 const navigation = [
   { name: 'Home', href: '/', current: path === '/' },
   { name: 'Categories', href: '/categories', current: path.startsWith('/categories') },
-  { name: 'Posts', href: '#', current: false },
+  { name: 'Posts', href: '/posts', current: path.startsWith('/posts') },
   { name: 'Gallery', href: '#', current: false },
   { name: 'Settings', href: '#', current: false }
 ]
