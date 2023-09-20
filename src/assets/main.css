@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: Walone;
+  src: url('/Z06-Walone/Z06-Walone\ Regular.ttf');
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Walone;
+  src: url('/Z06-Walone/Z06-Walone\ Bold.ttf');
+  font-style: normal;
+  font-weight: 700 600;
+}
+
+@font-face {
+  font-family: Walone;
+  src: url('/Z06-Walone/Z06-Walone\ Thin.ttf');
+  font-style: normal;
+  font-weight: 300;
+}
