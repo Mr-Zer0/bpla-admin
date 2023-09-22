@@ -1,8 +1,6 @@
 <template>
   <TopBar />
 
-  <div class="test">a</div>
-
   <main class="mx-auto my-9 max-w-7xl px-2 sm:px-6 lg:px-8">
 
     <section>
@@ -108,7 +106,12 @@ const ckConfig = {}
 
 <style lang="scss">
 .ck-content {
-  h1, h2, h3, h4 {
+  height: 500px;
+
+  font-family: Inter, Walone, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 400;
+
+  h1, h2, h3, h4, h5, h6 {
     color: #ee382a;
   }
   h1 {
@@ -122,6 +125,29 @@ const ckConfig = {}
   }
   h4 {
     font-size: calc(1.275rem + 0.3vw);
+  }
+  h5 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  h6 {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  p {
+    line-height: 1.6rem;
+    padding-top: 0.95rem;
+    padding-bottom: 0.95rem;
+  }
+
+  ul, ol {
+    margin-left: 1.5rem;
+
+    li {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+    }
   }
 }
 </style>
