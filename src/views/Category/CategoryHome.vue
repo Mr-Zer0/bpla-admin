@@ -40,28 +40,18 @@
 </template>
 
 <script setup lang="ts">
-import { PencilSquareIcon } from '@heroicons/vue/24/outline';
-import { getAll } from '@/firebase/firestore'
-import type CategoryContract from '@/contracts/category.interface'
 import { onMounted, ref } from 'vue';
+import { PencilSquareIcon } from '@heroicons/vue/24/outline';
+import { useCategoryStore } from '@/stores/category';
+import type CategoryType from '@/contracts/category.interface'
 
-const categories = ref<Array<CategoryContract>>([])
+const categories = ref<Array<CategoryType>>([])
 
 onMounted(async () => {
-  const querySnapshot = await getAll('category')
+  const categoryStore = useCategoryStore()
+  
+  categories.value = await categoryStore.fetch()
 
-  querySnapshot.forEach((doc) => {
-    const data = doc.data()
-
-    categories.value.push({
-      name: data.name,
-      slug: data.slug,
-      description: data.description,
-      status: data.status,
-      created: data.created,
-      modified: data.modified
-    })
-  })
 })
 
 </script>
