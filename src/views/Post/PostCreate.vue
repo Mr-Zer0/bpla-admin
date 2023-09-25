@@ -9,7 +9,7 @@
 
     <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
 
-      <form action="#">
+      <form @submit.prevent="submit">
 
         <div class="col-span-full">
           <label 
@@ -80,6 +80,22 @@
           </div>
         </div>
 
+        <hr class="my-10">
+
+        <div class="mt-6 flex items-center justify-end gap-x-6">
+
+          <a class="ext-sm font-semibold leading-6 text-gray-900 cursor-pointer" @click.prevent="draft()">
+            Save Draft
+          </a>
+
+          <input
+            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer" 
+            type="submit" 
+            value="Submit"
+          >
+
+        </div>
+
       </form>
 
     </section>
@@ -91,16 +107,36 @@
 import TopBar from '@/components/TopBar.vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CKEditor from '@ckeditor/ckeditor5-vue'
+import { addPost } from '@/firebase/firestore'
+import router from '@/router';
 
 let title = ''
 let slug = ''
 let excerpt = ''
 let category = ''
+let status = 'Published'
 let content = '<p>This is the content</p>'
 
 const ckeditor = CKEditor.component
 
 const ckConfig = {}
+
+const submit = async () => {
+  const result = await addPost(
+    'post',
+    {
+      title: title,
+      slug: slug,
+      excerpt: excerpt,
+      content: content,
+      status: status
+    }
+  )
+
+  console.log('Posted result : ', result)
+
+  return router.push('/posts')
+}
 
 </script>
 
