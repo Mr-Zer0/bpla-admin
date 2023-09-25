@@ -36,9 +36,6 @@ const actions = [
 </script>
 
 <template>
-  <TopBar />
-
-  <main class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 mt-8">
     <section class="grid grid-cols-2 md:grid-cols-4 gap-5">
       <a
         v-for="(action, i) in actions"
@@ -51,5 +48,4 @@ const actions = [
         <p v-text="action.description" class="text-sm mt-2" />
       </a>
     </section>
-  </main>
 </template>
