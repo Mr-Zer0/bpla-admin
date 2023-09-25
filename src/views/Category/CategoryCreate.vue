@@ -1,8 +1,4 @@
 <template>
-  <TopBar />
-
-  <main class="mx-auto my-9 max-w-7xl px-2 sm:px-6 lg:px-8">
-    
     <section>
       <h3 class="text-3xl font-semibold">Create New Category</h3>
     </section>
@@ -88,12 +84,9 @@
 
       </form>
     </section>
-
-  </main>
 </template>
 
 <script setup lang="ts">
-import TopBar from '@/components/TopBar.vue'
 import { add } from '@/firebase/firestore'
 import router from '@/router';
 

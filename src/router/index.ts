@@ -26,6 +26,40 @@ const router = createRouter({
           path: '',
           name: 'home',
           component: HomeView
+        },
+        {
+          path: '/categories',
+          name: 'categories',
+          component: CategoryIndex,
+          children: [
+            {
+              path: '',
+              name: 'categories.home',
+              component: CategoryHome
+            },
+            {
+              path: 'create',
+              name: 'categories.create',
+              component: CategoryCreate
+            }
+          ]
+        },
+        {
+          path: '/posts',
+          name: 'posts',
+          component: PostIndex,
+          children: [
+            {
+              path: '',
+              name: 'posts.home',
+              component: PostHome
+            },
+            {
+              path: 'create',
+              name: 'post.create',
+              component: PostCreate
+            }
+          ]
         }
       ]
     },
@@ -41,40 +75,6 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
-    },
-    {
-      path: '/categories',
-      name: 'categories',
-      component: CategoryIndex,
-      children: [
-        {
-          path: '',
-          name: 'categories.home',
-          component: CategoryHome
-        },
-        {
-          path: 'create',
-          name: 'categories.create',
-          component: CategoryCreate
-        }
-      ]
-    },
-    {
-      path: '/posts',
-      name: 'posts',
-      component: PostIndex,
-      children: [
-        {
-          path: '',
-          name: 'posts.home',
-          component: PostHome
-        },
-        {
-          path: 'create',
-          name: 'post.create',
-          component: PostCreate
-        }
-      ]
     }
   ]
 })
