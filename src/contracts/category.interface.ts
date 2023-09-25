@@ -1,6 +1,7 @@
 import type { Timestamp } from "firebase/firestore"
 
 export default interface Category {
+  id?: string,
   name: string,
   slug: string,
   description: string,

@@ -2,8 +2,7 @@ import { addDoc, collection, Timestamp, getDocs } from "firebase/firestore"
 import { db } from "."
 import type Category from '@/contracts/category.interface'
 import type Post from '@/contracts/post.interface'
-import type { DocumentReference } from "firebase/firestore"
-import type { QuerySnapshot } from "firebase/firestore"
+import type { DocumentReference, QuerySnapshot } from "firebase/firestore"
 
 /**
  * Create a new document
