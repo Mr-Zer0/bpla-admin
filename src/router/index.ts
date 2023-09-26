@@ -17,6 +17,8 @@ import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  linkExactActiveClass: 'is-active',
+  linkActiveClass: 'current-active',
   routes: [
     {
       path: '/',

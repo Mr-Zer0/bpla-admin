@@ -130,15 +130,16 @@ import { signOut } from '@/firebase/fireauth';
 import router from '@/router';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { watch } from 'vue';
 
-console.log(router.currentRoute.value.fullPath)
+let current = '/'
 
 const path = router.currentRoute.value.fullPath
 
 const navigation = [
-  { name: 'Home', href: '/', current: path === '/' },
-  { name: 'Categories', href: '/categories', current: path.startsWith('/categories') },
-  { name: 'Posts', href: '/posts', current: path.startsWith('/posts') },
+  { name: 'Home', href: '/', current: current === '/' },
+  { name: 'Categories', href: '/categories', current: current.startsWith('/categories') },
+  { name: 'Posts', href: '/posts', current: current.startsWith('/posts') },
   { name: 'Gallery', href: '#', current: false },
   { name: 'Settings', href: '#', current: false }
 ]
@@ -148,4 +149,12 @@ async function logout() {
 
   router.push('/login')
 }
+
+watch(() => router.currentRoute.value.fullPath, () => {
+  console.log('Watcher: ', router.currentRoute.value.fullPath)
+
+  current = router.currentRoute.value.fullPath
+
+  console.log('Start With "/": ', current.startsWith('/'))
+})
 </script>
