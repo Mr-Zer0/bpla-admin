@@ -48,6 +48,31 @@
 
       <div class="col-span-full mt-5">
         <label 
+          for="category" 
+          class="block text-sm font-medium leading-6 text-slate-700"
+        >
+          Category
+        </label>
+        <div class="mt-2">
+          <select
+            v-model="category"
+            name="category"
+            id="category"
+            required
+            class="w-full rounded-md border-0 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          >
+            <option
+              v-for="cat in categories"
+              :key="cat.id"
+              :value="cat"
+              v-text="cat.name"
+            />
+          </select>
+        </div>
+      </div>
+
+      <div class="col-span-full mt-5">
+        <label 
           for="excerpt" 
           class="block text-sm font-medium leading-6 text-slate-700"
         >
@@ -102,35 +127,59 @@
 <script setup lang="ts">
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CKEditor from '@ckeditor/ckeditor5-vue'
-import { addPost } from '@/firebase/firestore'
+import { addPost } from '@/firebase/model'
 import router from '@/router';
+import { useCategoryStore } from '@/stores/category'
+import { ref } from 'vue';
+
+import type CategoryType from '@/contracts/category.interface'
+import { onMounted } from 'vue';
 
 let title = ''
 let slug = ''
 let excerpt = ''
-let category = ''
+let category:CategoryType|null = null
 let status = 'Published'
-let content = '<p>This is the content</p>'
+let content = ''
 
 const ckeditor = CKEditor.component
-
 const ckConfig = {}
+
+const categoryStore = useCategoryStore()
+
+const categories = ref<Array<CategoryType>>()
+
+onMounted(async () => {
+  categories.value = await categoryStore.fetch()
+})
 
 const submit = async () => {
   const result = await addPost(
-    'post',
     {
       title: title,
       slug: slug,
       excerpt: excerpt,
       content: content,
-      status: status
+      status: status,
+      category: {
+        id: category && category.id ? category.id : '',
+        name: category ? category.name : '',
+        slug: category ? category.slug : ''
+      }
     }
   )
 
   console.log('Posted result : ', result)
 
   return router.push('/posts')
+}
+
+const draft = async () => {
+  status = 'Drafted'
+
+  await submit()
+
+  status = 'Published'
 }
 
 </script>
