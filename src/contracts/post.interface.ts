@@ -1,11 +1,15 @@
 import type { Timestamp } from "firebase/firestore"
 
-export default interface Category {
+export default interface Post {
+  id?: string,
   title: string,
   slug: string,
   excerpt: string,
   status: string,
   content: string,
-  created?: Timestamp,
-  modified?: Timestamp
+  published?: Date,
+  created?: Date,
+  modified?: Date
+  // created?: Timestamp,
+  // modified?: Timestamp
 }

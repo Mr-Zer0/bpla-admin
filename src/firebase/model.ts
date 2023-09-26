@@ -1,13 +1,15 @@
 import type CategoryType from '@/contracts/category.interface'
 import type PostType from '@/contracts/post.interface'
-import type { DocumentReference, QuerySnapshot } from 'firebase/firestore'
+import type { DocumentData, DocumentReference, QuerySnapshot } from 'firebase/firestore'
 
 import { db } from '.'
 import { 
   Timestamp, 
   addDoc, 
   collection, 
-  getDocs 
+  getDocs,
+  getDoc,
+  doc
 } from 'firebase/firestore'
 
 /**
@@ -25,8 +27,10 @@ export const add = async (col: string, payload: CategoryType|PostType): Promise<
   return docRef
 }
 
-export const getOne = async (col: string, uid: string) => {
+export const getOne = async (col: string, uid: string) : Promise<DocumentData> => {
+  const docRef = doc(db, col, uid)
 
+  return await getDoc(docRef)
 }
 
 /**
@@ -52,10 +56,22 @@ export const getAllCategories = async () : Promise<QuerySnapshot> => {
   return await getAll('category')
 }
 
+export const getACategory = async (id: string) : Promise<DocumentData> => {
+  return await getOne('category', id)
+}
+
 /************
  * == POST ==
  ************/
 
 export const addPost = async (payload: PostType) : Promise<DocumentReference> => {
   return await add('post', payload)
+}
+
+export const getAllPosts = async () : Promise<QuerySnapshot> => {
+  return await getAll('post')
+}
+
+export const getAPost = async (id: string) : Promise<DocumentData> => {
+  return await getOne('post', id)
 }
