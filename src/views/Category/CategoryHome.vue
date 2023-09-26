@@ -51,7 +51,6 @@ onMounted(async () => {
   const categoryStore = useCategoryStore()
   
   categories.value = await categoryStore.fetch()
-
 })
 
 </script>
