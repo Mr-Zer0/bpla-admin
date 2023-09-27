@@ -30,10 +30,13 @@
         />
       </div>
 
-      <div>
+      <div class="flex flex-wrap md:flex-nowrap items-start gap-2">
         <a href="#">
           <PencilSquareIcon class="w-5 text-slate-500 hover:text-slate-700" />
         </a>
+        <button @click="remove(cat.id!)">
+          <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
+        </button>
       </div>
     </article>
   </section>
@@ -41,15 +44,28 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { PencilSquareIcon } from '@heroicons/vue/24/outline'
+import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useCategoryStore } from '@/stores/category'
+import { deleteACategory } from '@/firebase/model'
 import type CategoryType from '@/contracts/category.interface'
 
 const categories = ref<Array<CategoryType>>([])
+const categoryStore = useCategoryStore()
 
 onMounted(async () => {
-  const categoryStore = useCategoryStore()
-
   categories.value = await categoryStore.fetch()
 })
+
+const remove = async (id: string) => {
+  const item = categories.value.find(i => i.id = id)
+  const confirmation = confirm(`Are you sure you want to delete the category! \n "${ item?.name }"`)
+
+  if (confirmation) {
+
+    await deleteACategory(id)
+
+    categories.value = await categoryStore.fetch(true)
+
+  }
+}
 </script>
