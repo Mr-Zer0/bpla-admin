@@ -1,8 +1,8 @@
-import { addDoc, collection, Timestamp, getDocs } from "firebase/firestore"
-import { db } from "."
+import { addDoc, collection, Timestamp, getDocs } from 'firebase/firestore'
+import { db } from '.'
 import type Category from '@/contracts/category.interface'
 import type Post from '@/contracts/post.interface'
-import type { DocumentReference, QuerySnapshot } from "firebase/firestore"
+import type { DocumentReference, QuerySnapshot } from 'firebase/firestore'
 
 /**
  * Create a new document
@@ -30,7 +30,7 @@ export const getAll = async (col: string): Promise<QuerySnapshot> => {
   return querySnapshot
 }
 
-export const addPost = async (col:string, payload: Post): Promise<DocumentReference> => {
+export const addPost = async (col: string, payload: Post): Promise<DocumentReference> => {
   payload.created = Timestamp.now()
   payload.modified = Timestamp.now()
 

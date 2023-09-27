@@ -1,7 +1,5 @@
 <template>
-
   <section class="flex justify-between items-center">
-
     <h3 class="text-3xl font-semibold">Posts</h3>
 
     <router-link
@@ -10,15 +8,16 @@
     >
       Create
     </router-link>
-
   </section>
 
   <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200">
-
     <article
-      v-for="(post, i) in posts" 
+      v-for="(post, i) in posts"
       :key="post.id"
-      :class="[i === postStore.count - 1 ? '' : 'border-b border-solid border-slate-200', 'px-5 py-3 flex justify-between']"
+      :class="[
+        i === postStore.count - 1 ? '' : 'border-b border-solid border-slate-200',
+        'px-5 py-3 flex justify-between'
+      ]"
     >
       <div>
         <h3 v-text="post.title" class="text-lg" />
@@ -46,18 +45,16 @@
         </button>
       </div>
     </article>
-
   </section>
-
 </template>
 
 <script setup lang="ts">
 import { usePostStore } from '@/stores/post'
 import { onMounted, ref } from 'vue'
-import { 
-  CalendarIcon, 
-  TagIcon, 
-  PuzzlePieceIcon, 
+import {
+  CalendarIcon,
+  TagIcon,
+  PuzzlePieceIcon,
   PencilSquareIcon,
   TrashIcon
 } from '@heroicons/vue/24/outline'

@@ -1,5 +1,5 @@
-import { defineStore } from "pinia"
-import { computed, ref } from "vue"
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 import { getAllCategories } from '@/firebase/model'
 import type CategoryType from '@/contracts/category.interface'
 import type { QuerySnapshot, QueryDocumentSnapshot } from 'firebase/firestore'
@@ -17,17 +17,17 @@ export const useCategoryStore = defineStore('category', () => {
    * @returns array
    */
   async function fetch(force = false) {
-    if (! categorySnapshot.value || force) {
+    if (!categorySnapshot.value || force) {
       const querySnapshot = await getAllCategories()
 
       categorySnapshot.value = querySnapshot
-      categories.value = querySnapshot.docs.map(x => mapCategory(x))
+      categories.value = querySnapshot.docs.map((x) => mapCategory(x))
     }
 
     return categories.value
   }
 
-  return   { categories, fetch, count, empty }
+  return { categories, fetch, count, empty }
 })
 
 /**
@@ -35,7 +35,7 @@ export const useCategoryStore = defineStore('category', () => {
  * @param x QueryDocumentSnapshot
  * @returns CategoryType
  */
-const mapCategory = (x: QueryDocumentSnapshot) : CategoryType => {
+const mapCategory = (x: QueryDocumentSnapshot): CategoryType => {
   const data = x.data()
 
   return {

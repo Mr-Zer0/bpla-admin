@@ -3,14 +3,7 @@ import type PostType from '@/contracts/post.interface'
 import type { DocumentData, DocumentReference, QuerySnapshot } from 'firebase/firestore'
 
 import { db } from '.'
-import { 
-  Timestamp, 
-  addDoc, 
-  collection, 
-  getDocs,
-  getDoc,
-  doc
-} from 'firebase/firestore'
+import { Timestamp, addDoc, collection, getDocs, getDoc, doc } from 'firebase/firestore'
 
 /**
  * Create a new document
@@ -18,7 +11,10 @@ import {
  * @param payload Category Category information
  * @returns DocumentReference
  */
-export const add = async (col: string, payload: CategoryType|PostType): Promise<DocumentReference> => {
+export const add = async (
+  col: string,
+  payload: CategoryType | PostType
+): Promise<DocumentReference> => {
   payload.created = Timestamp.now()
   payload.modified = Timestamp.now()
 
@@ -27,7 +23,7 @@ export const add = async (col: string, payload: CategoryType|PostType): Promise<
   return docRef
 }
 
-export const getOne = async (col: string, uid: string) : Promise<DocumentData> => {
+export const getOne = async (col: string, uid: string): Promise<DocumentData> => {
   const docRef = doc(db, col, uid)
 
   return await getDoc(docRef)
@@ -48,15 +44,15 @@ export const getAll = async (col: string): Promise<QuerySnapshot> => {
  * == CATEGORY ==
  ****************/
 
-export const addCategory = async (payload: CategoryType) : Promise<DocumentReference> => {
+export const addCategory = async (payload: CategoryType): Promise<DocumentReference> => {
   return await add('category', payload)
 }
 
-export const getAllCategories = async () : Promise<QuerySnapshot> => {
+export const getAllCategories = async (): Promise<QuerySnapshot> => {
   return await getAll('category')
 }
 
-export const getACategory = async (id: string) : Promise<DocumentData> => {
+export const getACategory = async (id: string): Promise<DocumentData> => {
   return await getOne('category', id)
 }
 
@@ -64,14 +60,14 @@ export const getACategory = async (id: string) : Promise<DocumentData> => {
  * == POST ==
  ************/
 
-export const addPost = async (payload: PostType) : Promise<DocumentReference> => {
+export const addPost = async (payload: PostType): Promise<DocumentReference> => {
   return await add('post', payload)
 }
 
-export const getAllPosts = async () : Promise<QuerySnapshot> => {
+export const getAllPosts = async (): Promise<QuerySnapshot> => {
   return await getAll('post')
 }
 
-export const getAPost = async (id: string) : Promise<DocumentData> => {
+export const getAPost = async (id: string): Promise<DocumentData> => {
   return await getOne('post', id)
 }

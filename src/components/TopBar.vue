@@ -22,11 +22,11 @@
               v-for="item in navigation"
               :key="item.name"
               :to="item.href"
-              class='text-gray-500 border-transparent hover:text-gray-700 hover:border-b-gray-300 border-b-2 border-solid pt-2 px-3 inline-flex items-center text-sm font-medium'
+              class="text-gray-500 border-transparent hover:text-gray-700 hover:border-b-gray-300 border-b-2 border-solid pt-2 px-3 inline-flex items-center text-sm font-medium"
               aria-current="page"
             >
               {{ item.name }}
-          </router-link>
+            </router-link>
           </div>
         </div>
         <div
@@ -77,7 +77,7 @@
                     href="#"
                     :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
                     @click.prevent="logout"
-                    >
+                  >
                     Sign out
                   </a>
                 </MenuItem>
@@ -95,7 +95,7 @@
           :key="item.name"
           as="a"
           :href="item.href"
-          class='text-gray-500 hover:bg-gray-400/[.06] border-transparent hover:border-l-gray-400 block px-4 py-2 text-base font-medium border-l-4 border-solid'
+          class="text-gray-500 hover:bg-gray-400/[.06] border-transparent hover:border-l-gray-400 block px-4 py-2 text-base font-medium border-l-4 border-solid"
           aria-current="page"
         >
           {{ item.name }}
@@ -116,10 +116,10 @@ import {
   MenuItems
 } from '@headlessui/vue'
 
-import { signOut } from '@/firebase/fireauth';
-import router from '@/router';
+import { signOut } from '@/firebase/fireauth'
+import router from '@/router'
 
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 let current = '/'
 

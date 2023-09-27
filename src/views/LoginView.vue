@@ -2,13 +2,13 @@
   <main class="flex items-center justify-center min-h-screen">
     <form
       @submit.prevent="login"
-      :class="[state.error ? 'shake' : '', 'w-full md:w-1/2 md:max-w-md mx-5 bg-white py-7 md:py-10 rounded-lg shadow space-y-6']"
+      :class="[
+        state.error ? 'shake' : '',
+        'w-full md:w-1/2 md:max-w-md mx-5 bg-white py-7 md:py-10 rounded-lg shadow space-y-6'
+      ]"
     >
       <div class="px-7 md:px-10">
-        <label
-          for="email"
-          class="block text-sm font-medium leading-6 text-gray-900"
-        >
+        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">
           Email address
         </label>
         <div class="mt-2">
@@ -20,7 +20,7 @@
             autocomplete="email"
             required
             class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          >
+          />
         </div>
       </div>
 
@@ -37,14 +37,11 @@
             autocomplete="current-password"
             required
             class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          >
+          />
         </div>
       </div>
 
-      <div
-        v-if="state.error"
-        class="bg-gray-100 py-5 px-7 md:px-10"
-      >
+      <div v-if="state.error" class="bg-gray-100 py-5 px-7 md:px-10">
         <p class="text-center flex justify-center text-gray-700">
           <ExclamationTriangleIcon class="w-6 mr-3 text-red-800" />
           {{ state.error }}
@@ -53,16 +50,8 @@
 
       <div class="flex justify-between px-7 md:px-10">
         <div class="flex items-center">
-          <input
-            type="checkbox"
-            name="remember"
-            id="remember"
-            class="w-4 h-4 rounded"
-            checked
-          >
-          <label for="remember" class="ml-2 text-sm">
-            Remember Me
-          </label>
+          <input type="checkbox" name="remember" id="remember" class="w-4 h-4 rounded" checked />
+          <label for="remember" class="ml-2 text-sm"> Remember Me </label>
         </div>
 
         <div>
@@ -84,15 +73,15 @@
 
 <script setup lang="ts">
 import { signIn } from '@/firebase/fireauth'
-import router from '@/router';
-import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
+import router from '@/router'
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 import { FirebaseError } from 'firebase/app'
-import { reactive } from 'vue';
+import { reactive } from 'vue'
 
 let email = ''
 let password = ''
 
-const state = reactive({ 
+const state = reactive({
   error: ''
 })
 
@@ -100,12 +89,9 @@ async function login() {
   state.error = ''
 
   try {
-
     await signIn(email, password)
     return router.push('/')
-
   } catch (error) {
-
     const code = error instanceof FirebaseError ? error.code : String(error)
     const message = error instanceof FirebaseError ? error.message : String(error)
 
@@ -118,7 +104,6 @@ async function login() {
     } else {
       state.error = 'Authentication fail. Try Again.'
     }
-    
   }
 }
 </script>

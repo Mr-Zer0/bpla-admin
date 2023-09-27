@@ -1,5 +1,5 @@
-import { defineStore } from "pinia"
-import { computed, ref } from "vue"
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 import { getAllPosts } from '@/firebase/model'
 import type PostType from '@/contracts/post.interface'
 import type { QuerySnapshot, QueryDocumentSnapshot } from 'firebase/firestore'
@@ -8,8 +8,8 @@ export const usePostStore = defineStore('post', () => {
   const posts = ref<Array<PostType>>([])
   const postSnapshot = ref<QuerySnapshot>()
 
-  const count = computed(() => postSnapshot.value ? postSnapshot.value.size : 0)
-  const empty = computed(() => postSnapshot.value ? postSnapshot.value.empty : true)
+  const count = computed(() => (postSnapshot.value ? postSnapshot.value.size : 0))
+  const empty = computed(() => (postSnapshot.value ? postSnapshot.value.empty : true))
 
   /**
    * Fetch all posts from database
@@ -17,17 +17,17 @@ export const usePostStore = defineStore('post', () => {
    * @returns array
    */
   async function fetch(force = false) {
-    if (! postSnapshot.value || force) {
+    if (!postSnapshot.value || force) {
       const querySnapshot = await getAllPosts()
 
       postSnapshot.value = querySnapshot
-      posts.value = querySnapshot.docs.map(x => mapPost(x))
+      posts.value = querySnapshot.docs.map((x) => mapPost(x))
     }
 
     return posts.value
   }
 
-  return   { posts, fetch, count, empty }
+  return { posts, fetch, count, empty }
 })
 
 /**
@@ -35,7 +35,7 @@ export const usePostStore = defineStore('post', () => {
  * @param x QueryDocumentSnapshot
  * @returns PostType
  */
-const mapPost = (x: QueryDocumentSnapshot) : PostType => {
+const mapPost = (x: QueryDocumentSnapshot): PostType => {
   const data = x.data()
 
   return {
