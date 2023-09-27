@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { add } from '@/firebase/firestore'
+import { addCategory } from '@/firebase/model'
 import router from '@/router'
 
 let name = ''
@@ -82,7 +82,7 @@ let status = 'Published'
 const submit = async () => {
   console.log('Name : ', name, 'Slug : ', slug, 'Description : ', description, 'Status : ', status)
 
-  const result = await add('category', {
+  const result = await addCategory({
     name: name,
     slug: slug,
     description: description,

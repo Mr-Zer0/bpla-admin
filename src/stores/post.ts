@@ -42,6 +42,7 @@ const mapPost = (x: QueryDocumentSnapshot): PostType => {
     id: x.id,
     title: data.title,
     slug: data.slug,
+    category: data.category,
     excerpt: data.excerpt,
     content: data.content,
     status: data.status,
