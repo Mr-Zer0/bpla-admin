@@ -22,13 +22,8 @@
               v-for="item in navigation"
               :key="item.name"
               :to="item.href"
-              :class="[
-                item.current
-                  ? 'border-b-2 border-b-primary'
-                  : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-b-gray-300',
-                'border-b-2 border-solid pt-2 px-3 inline-flex items-center text-sm font-medium'
-              ]"
-              :aria-current="item.current ? 'page' : undefined"
+              class='text-gray-500 border-transparent hover:text-gray-700 hover:border-b-gray-300 border-b-2 border-solid pt-2 px-3 inline-flex items-center text-sm font-medium'
+              aria-current="page"
             >
               {{ item.name }}
           </router-link>
@@ -100,13 +95,8 @@
           :key="item.name"
           as="a"
           :href="item.href"
-          :class="[
-            item.current
-              ? 'border-l-4 bg-primary/[.06] border-solid border-primary'
-              : 'text-gray-500 hover:bg-gray-400/[.06] border-transparent hover:border-l-gray-400',
-            'block px-4 py-2 text-base font-medium border-l-4 border-solid'
-          ]"
-          :aria-current="item.current ? 'page' : undefined"
+          class='text-gray-500 hover:bg-gray-400/[.06] border-transparent hover:border-l-gray-400 block px-4 py-2 text-base font-medium border-l-4 border-solid'
+          aria-current="page"
         >
           {{ item.name }}
         </DisclosureButton>
@@ -130,18 +120,15 @@ import { signOut } from '@/firebase/fireauth';
 import router from '@/router';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
-import { watch } from 'vue';
 
 let current = '/'
-
-const path = router.currentRoute.value.fullPath
 
 const navigation = [
   { name: 'Home', href: '/', current: current === '/' },
   { name: 'Categories', href: '/categories', current: current.startsWith('/categories') },
   { name: 'Posts', href: '/posts', current: current.startsWith('/posts') },
-  { name: 'Gallery', href: '#', current: false },
-  { name: 'Settings', href: '#', current: false }
+  { name: 'Gallery', href: '/#', current: false },
+  { name: 'Settings', href: '/#', current: false }
 ]
 
 async function logout() {
@@ -149,12 +136,11 @@ async function logout() {
 
   router.push('/login')
 }
-
-watch(() => router.currentRoute.value.fullPath, () => {
-  console.log('Watcher: ', router.currentRoute.value.fullPath)
-
-  current = router.currentRoute.value.fullPath
-
-  console.log('Start With "/": ', current.startsWith('/'))
-})
 </script>
+
+<style scoped lang="scss">
+.is-active {
+  color: #0f172a;
+  border-bottom: 3px solid #94a3b8;
+}
+</style>
