@@ -3,7 +3,7 @@ import type PostType from '@/contracts/post.interface'
 import type { DocumentData, DocumentReference, QuerySnapshot } from 'firebase/firestore'
 
 import { db } from '.'
-import { Timestamp, addDoc, collection, getDocs, getDoc, doc } from 'firebase/firestore'
+import { Timestamp, addDoc, collection, getDocs, getDoc, doc, deleteDoc } from 'firebase/firestore'
 
 /**
  * Create a new document
@@ -56,6 +56,10 @@ export const getACategory = async (id: string): Promise<DocumentData> => {
   return await getOne('category', id)
 }
 
+export const deleteACategory = async (id: string): Promise<void> => {
+  return await deleteDoc(doc(db, 'category', id))
+}
+
 /************
  * == POST ==
  ************/
@@ -70,4 +74,8 @@ export const getAllPosts = async (): Promise<QuerySnapshot> => {
 
 export const getAPost = async (id: string): Promise<DocumentData> => {
   return await getOne('post', id)
+}
+
+export const deleteAPost = async (id: string): Promise<void> => {
+  return await deleteDoc(doc(db, 'post', id))
 }

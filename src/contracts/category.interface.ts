@@ -1,7 +1,7 @@
 import type { Timestamp } from 'firebase/firestore'
 
 export default interface Category {
-  id?: string
+  id?: NonNullable<string>
   name: string
   slug: string
   description: string
