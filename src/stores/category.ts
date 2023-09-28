@@ -8,8 +8,8 @@ export const useCategoryStore = defineStore('category', () => {
   const categories = ref<Array<CategoryType>>([])
   const categorySnapshot = ref<QuerySnapshot>()
 
-  const count = computed(() => categorySnapshot.value?.size)
-  const empty = computed(() => categorySnapshot.value?.empty)
+  const count = computed(() => categories.value.length)
+  const empty = computed(() => categories.value.length === 0)
 
   /**
    * Fetch data from server
@@ -21,13 +21,21 @@ export const useCategoryStore = defineStore('category', () => {
       const querySnapshot = await getAllCategories()
 
       categorySnapshot.value = querySnapshot
-      categories.value = querySnapshot.docs.map((x) => mapCategory(x))
+      categories.value = querySnapshot.docs.map(x => mapCategory(x))
     }
 
     return categories.value
   }
 
-  return { categories, fetch, count, empty }
+  function removeACategory(id: string) {
+    const result = categories.value.filter((item: CategoryType) => item.id !== id)
+    
+    categories.value = result
+
+    return categories.value
+  }
+
+  return { categories, fetch, removeACategory, count, empty }
 })
 
 /**

@@ -34,7 +34,7 @@
         <a href="#">
           <PencilSquareIcon class="w-5 text-slate-500 hover:text-slate-700" />
         </a>
-        <button @click="remove(cat.id!)">
+        <button @click="remove(cat)">
           <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
         </button>
       </div>
@@ -53,18 +53,17 @@ const categories = ref<Array<CategoryType>>([])
 const categoryStore = useCategoryStore()
 
 onMounted(async () => {
-  categories.value = await categoryStore.fetch()
+  await categoryStore.fetch()
 })
 
-const remove = async (id: string) => {
-  const item = categories.value.find(i => i.id = id)
-  const confirmation = confirm(`Are you sure you want to delete the category! \n "${ item?.name }"`)
+const remove = async (cat: CategoryType) => {
+  const confirmation = confirm(`Are you sure you want to delete the category! \n "${ cat.name }"`)
 
   if (confirmation) {
 
-    await deleteACategory(id)
+    await deleteACategory(cat.id!)
 
-    categories.value = await categoryStore.fetch(true)
+    categoryStore.removeACategory(cat.id!)
 
   }
 }
