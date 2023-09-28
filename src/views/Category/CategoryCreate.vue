@@ -73,23 +73,26 @@
 <script setup lang="ts">
 import { addCategory } from '@/firebase/model'
 import router from '@/router'
+import { useCategoryStore } from '@/stores/category'
 
 let name = ''
 let slug = ''
 let description = ''
 let status = 'Published'
 
+const categoryStore = useCategoryStore()
+
 const submit = async () => {
   console.log('Name : ', name, 'Slug : ', slug, 'Description : ', description, 'Status : ', status)
 
-  const result = await addCategory({
+  await addCategory({
     name: name,
     slug: slug,
     description: description,
     status: status
   })
 
-  console.log(result)
+  await categoryStore.fetch(true)
 
   return router.push('/categories')
 }

@@ -12,7 +12,7 @@
 
   <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200">
     <article
-      v-for="(cat, i) in categories"
+      v-for="(cat, i) in categoryStore.categories"
       :key="i"
       :class="[
         i === categories.length - 1 ? '' : 'border-b border-solid border-slate-200',
