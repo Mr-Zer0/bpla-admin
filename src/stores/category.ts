@@ -12,7 +12,7 @@ export const useCategoryStore = defineStore('category', () => {
   const empty = computed(() => categories.value.length === 0)
 
   /**
-   * Fetch data from server
+   * Return category data from state if exist
    * @param force boolean
    * @returns array
    */
@@ -35,7 +35,11 @@ export const useCategoryStore = defineStore('category', () => {
     return categories.value
   }
 
-  return { categories, fetch, removeACategory, count, empty }
+  const getOne = (uid: string) => {
+    return categories.value.find(element => element.id === uid)
+  }
+
+  return { categories, fetch, removeACategory, count, empty, getOne }
 })
 
 /**

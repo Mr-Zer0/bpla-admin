@@ -4,9 +4,11 @@ import LayoutView from '@/views/LayoutView.vue'
 
 import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
+
 import CategoryIndex from '@/views/Category/CategoryIndex.vue'
 import CategoryCreate from '@/views/Category/CategoryCreate.vue'
 import CategoryHome from '@/views/Category/CategoryHome.vue'
+import CategoryEdit from '@/views/Category/CategoryEdit.vue'
 
 import PostIndex from '@/views/Post/PostIndex.vue'
 import PostHome from '@/views/Post/PostHome.vue'
@@ -43,6 +45,11 @@ const router = createRouter({
               path: 'create',
               name: 'categories.create',
               component: CategoryCreate
+            },
+            {
+              path: 'edit/:id',
+              name: 'category.edit',
+              component: CategoryEdit
             }
           ]
         },

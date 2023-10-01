@@ -71,25 +71,29 @@
 </template>
 
 <script setup lang="ts">
-import { addCategory } from '@/firebase/model'
+import { updateACategory } from '@/firebase/model'
 import router from '@/router'
 import { useCategoryStore } from '@/stores/category'
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
-let name = ''
-let slug = ''
-let description = ''
-let status = 'Published'
+const id = ref('')
+const name = ref('')
+const slug = ref('')
+const description = ref('')
+const status = ref('published') 
 
 const categoryStore = useCategoryStore()
+const route = useRoute()
 
 const submit = async () => {
   console.log('Name : ', name, 'Slug : ', slug, 'Description : ', description, 'Status : ', status)
 
-  await addCategory({
-    name: name,
-    slug: slug,
-    description: description,
-    status: status
+  await updateACategory(id.value, {
+    name: name.value,
+    slug: slug.value,
+    description: description.value,
+    status: status.value
   })
 
   await categoryStore.fetch(true)
@@ -98,10 +102,24 @@ const submit = async () => {
 }
 
 const draft = async () => {
-  status = 'drafted'
+  status.value = 'drafted'
 
   await submit()
 
-  status = 'published'
+  status.value = 'published'
 }
+
+onMounted(async () => {
+  await categoryStore.fetch()
+
+  const category = categoryStore.getOne(route.params.id.toString())
+
+  if(category) {
+    id.value = category.id!
+    name.value = category.name
+    slug.value = category.slug
+    description.value = category.description
+    status.value = category.status
+  }
+})
 </script>

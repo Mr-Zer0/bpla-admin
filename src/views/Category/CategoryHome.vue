@@ -31,8 +31,11 @@
       </div>
 
       <div class="flex flex-wrap md:flex-nowrap items-start gap-2">
-        <a href="#">
+        <router-link :to="'/categories/edit/' + cat.id">
           <PencilSquareIcon class="w-5 text-slate-500 hover:text-slate-700" />
+        </router-link>
+        <a href="">
+          
         </a>
         <button @click="remove(cat)">
           <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
