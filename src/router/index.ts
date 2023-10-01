@@ -13,6 +13,9 @@ import CategoryEdit from '@/views/Category/CategoryEdit.vue'
 import PostIndex from '@/views/Post/PostIndex.vue'
 import PostHome from '@/views/Post/PostHome.vue'
 import PostCreate from '@/views/Post/PostCreate.vue'
+import PostEdit from '@/views/Post/PostEdit.vue'
+
+import ErrorView from '@/views/ErrorView.vue'
 
 import { currentUser } from '@/firebase/fireauth'
 import { useAuthStore } from '@/stores/auth'
@@ -67,6 +70,11 @@ const router = createRouter({
               path: 'create',
               name: 'post.create',
               component: PostCreate
+            },
+            {
+              path: 'edit/:id',
+              name: 'posts.edit',
+              component: PostEdit
             }
           ]
         }
@@ -84,6 +92,10 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/:notFound',
+      component: ErrorView
     }
   ]
 })
