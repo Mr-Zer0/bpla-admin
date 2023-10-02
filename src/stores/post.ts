@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { getAllPosts } from '@/firebase/model'
+import { getAllPosts, getAPost } from '@/firebase/model'
 import type PostType from '@/contracts/post.interface'
 import type { QuerySnapshot, QueryDocumentSnapshot } from 'firebase/firestore'
 
@@ -27,7 +27,17 @@ export const usePostStore = defineStore('post', () => {
     return posts.value
   }
 
-  return { posts, fetch, count, empty }
+  const getOne = async (uid: string) => {
+    if(posts.value.length > 0) {
+      return posts.value.find(e => e.id === uid)
+    }
+
+    const result = await getAPost(uid)
+
+    return result.data()
+  }
+
+  return { posts, fetch, getOne, count, empty }
 })
 
 /**

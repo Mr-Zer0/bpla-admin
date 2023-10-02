@@ -94,7 +94,8 @@ const router = createRouter({
       component: LoginView
     },
     {
-      path: '/:notFound',
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
       component: ErrorView
     }
   ]

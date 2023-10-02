@@ -37,9 +37,9 @@
       </div>
 
       <div class="flex flex-wrap md:flex-nowrap items-start gap-2">
-        <button>
+        <router-link :to="'/posts/edit/' + post.id">
           <PencilSquareIcon class="w-5 h5 text-slate-500 hover:text-slate-700" />
-        </button>
+        </router-link>
         <button>
           <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
         </button>
