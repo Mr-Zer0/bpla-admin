@@ -24,6 +24,8 @@ export const add = async (
 }
 
 export const update = async (col: string, uid: string, payload: CategoryType | PostType): Promise<void> => {
+  payload.modified = Timestamp.now()
+
   await setDoc(doc(db, col, uid), payload, { merge: true })
 }
 

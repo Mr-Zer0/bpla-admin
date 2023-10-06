@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { getAllPosts, getAPost } from '@/firebase/model'
+import { getAllPosts, getAPost, update } from '@/firebase/model'
 import type PostType from '@/contracts/post.interface'
 import type { QuerySnapshot, QueryDocumentSnapshot } from 'firebase/firestore'
 
 export const usePostStore = defineStore('post', () => {
   const posts = ref<Array<PostType>>([])
   const postSnapshot = ref<QuerySnapshot>()
+
+  const collection = 'post'
 
   const count = computed(() => (postSnapshot.value ? postSnapshot.value.size : 0))
   const empty = computed(() => (postSnapshot.value ? postSnapshot.value.empty : true))
@@ -37,7 +39,20 @@ export const usePostStore = defineStore('post', () => {
     return result.data()
   }
 
-  return { posts, fetch, getOne, count, empty }
+  const updatePost = async (uid: string, value: PostType) => {
+    await update(collection, uid, value)
+
+    if (posts.value.length > 0) {
+      const index = posts.value.findIndex(e => e.id! === uid)
+
+      posts.value[index] = {
+        ...posts.value[index],
+        ...value
+      }
+    }
+  }
+
+  return { posts, fetch, getOne, updatePost, count, empty }
 })
 
 /**

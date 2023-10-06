@@ -48,7 +48,8 @@
             required
             class="w-full rounded-md border-0 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           >
-            <option v-for="cat in categories" :key="cat.id" :value="cat" v-text="cat.name" />
+          <option disabled value="">Select a category</option>
+            <option v-for="cat in categories" :key="cat.id" :value="cat.id" v-text="cat.name" />
           </select>
         </div>
       </div>
@@ -109,6 +110,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue'
 import { useCategoryStore } from '@/stores/category';
 
 import type CategoryType from '@/contracts/category.interface'
+import { experimentalSetDeliveryMetricsExportedToBigQueryEnabled } from 'firebase/messaging/sw';
 
 const props = defineProps<{
   uid?: string
@@ -128,7 +130,8 @@ let title = ref('')
 let slug = ref('')
 let excerpt = ref('')
 let content = ref('')
-let category = ref<CategoryType>()
+let category = ref('')
+let status = ref('published')
 
 let categories = ref<Array<CategoryType>>()
 
@@ -147,16 +150,47 @@ if (props.uid) {
     slug.value = result.slug
     excerpt.value = result.excerpt
     content.value = result.content
-    // category.value = categories.value.find(e => e.id === result.category.id)
-    category.value = result.category
+    category.value = result.category.id
   })
 }
 
-const submit = () => {
-  console.log ('it is submitted')
+const submit = async () => {
+  const result = categories.value?.find(({ id }) => id === category.value)
+
+  let cat = {
+    id: '',
+    name: '',
+    slug: ''
+  }
+
+  if (result) {
+    cat = {
+      id: result.id!,
+      name: result.name,
+      slug: result.slug
+    }
+  }
+
+  await postStore.updatePost(
+    props.uid!,
+    {
+      title: title.value,
+      slug: slug.value,
+      excerpt: excerpt.value,
+      content: content.value,
+      status: status.value,
+      category: cat
+    }
+  )
+
+  routerCompose.push({ name: 'posts.home' })
 }
 
 const draft = () => {
-  console.log('it is drafted')
+  status.value = 'drafted'
+
+  submit()
+
+  status.value = 'published'
 }
 </script>
