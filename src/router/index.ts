@@ -15,6 +15,9 @@ import PostHome from '@/views/Post/PostHome.vue'
 import PostCreate from '@/views/Post/PostCreate.vue'
 import PostEdit from '@/views/Post/PostEdit.vue'
 
+import GalleryIndex from '@/views/Gallery/GalleryIndex.vue'
+import GalleryHome from '@/views/Gallery/GalleryHome.vue'
+
 import ErrorView from '@/views/ErrorView.vue'
 
 import { currentUser } from '@/firebase/fireauth'
@@ -68,7 +71,7 @@ const router = createRouter({
             },
             {
               path: 'create',
-              name: 'post.create',
+              name: 'posts.create',
               component: PostCreate
             },
             {
@@ -76,6 +79,28 @@ const router = createRouter({
               name: 'posts.edit',
               component: PostEdit
             }
+          ]
+        },
+        {
+          path: '/gallery',
+          name: 'gallery',
+          component: GalleryIndex,
+          children: [
+            {
+              path: '',
+              name: 'gallery.home',
+              component: GalleryHome
+            },
+            // {
+            //   path: 'create',
+            //   name: 'post.create',
+            //   component: PostCreate
+            // },
+            // {
+            //   path: 'edit/:id',
+            //   name: 'gallery.edit',
+            //   component: PostEdit
+            // }
           ]
         }
       ]

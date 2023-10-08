@@ -110,7 +110,6 @@ import CKEditor from '@ckeditor/ckeditor5-vue'
 import { useCategoryStore } from '@/stores/category';
 
 import type CategoryType from '@/contracts/category.interface'
-import { experimentalSetDeliveryMetricsExportedToBigQueryEnabled } from 'firebase/messaging/sw';
 
 const props = defineProps<{
   uid?: string
