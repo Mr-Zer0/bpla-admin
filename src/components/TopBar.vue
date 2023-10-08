@@ -127,7 +127,7 @@ const navigation = [
   { name: 'Home', href: '/', current: current === '/' },
   { name: 'Categories', href: '/categories', current: current.startsWith('/categories') },
   { name: 'Posts', href: '/posts', current: current.startsWith('/posts') },
-  { name: 'Gallery', href: '/#', current: false },
+  { name: 'Gallery', href: '/gallery', current: false },
   { name: 'Settings', href: '/#', current: false }
 ]
 

@@ -1,5 +1,6 @@
 import type CategoryType from '@/contracts/category.interface'
 import type PostType from '@/contracts/post.interface'
+import type GalleryType from '@/contracts/gallery.interface'
 import type { DocumentData, DocumentReference, QuerySnapshot } from 'firebase/firestore'
 
 import { db } from '.'
@@ -13,7 +14,7 @@ import { Timestamp, addDoc, collection, getDocs, getDoc, doc, deleteDoc, setDoc 
  */
 export const add = async (
   col: string,
-  payload: CategoryType | PostType
+  payload: CategoryType | PostType | GalleryType
 ): Promise<DocumentReference> => {
   payload.created = Timestamp.now()
   payload.modified = Timestamp.now()
@@ -23,7 +24,7 @@ export const add = async (
   return docRef
 }
 
-export const update = async (col: string, uid: string, payload: CategoryType | PostType): Promise<void> => {
+export const update = async (col: string, uid: string, payload: CategoryType | PostType | GalleryType): Promise<void> => {
   payload.modified = Timestamp.now()
 
   await setDoc(doc(db, col, uid), payload, { merge: true })

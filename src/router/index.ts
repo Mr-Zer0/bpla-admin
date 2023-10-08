@@ -17,6 +17,7 @@ import PostEdit from '@/views/Post/PostEdit.vue'
 
 import GalleryIndex from '@/views/Gallery/GalleryIndex.vue'
 import GalleryHome from '@/views/Gallery/GalleryHome.vue'
+import GalleryForm from '@/views/Gallery/GalleryForm.vue'
 
 import ErrorView from '@/views/ErrorView.vue'
 
@@ -91,11 +92,11 @@ const router = createRouter({
               name: 'gallery.home',
               component: GalleryHome
             },
-            // {
-            //   path: 'create',
-            //   name: 'post.create',
-            //   component: PostCreate
-            // },
+            {
+              path: 'create',
+              name: 'gallery.create',
+              component: GalleryForm
+            },
             // {
             //   path: 'edit/:id',
             //   name: 'gallery.edit',
