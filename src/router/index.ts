@@ -96,7 +96,7 @@ const router = createRouter({
               path: 'create',
               name: 'gallery.create',
               component: GalleryForm
-            },
+            }
             // {
             //   path: 'edit/:id',
             //   name: 'gallery.edit',

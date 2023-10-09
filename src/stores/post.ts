@@ -30,8 +30,8 @@ export const usePostStore = defineStore('post', () => {
   }
 
   const getOne = async (uid: string) => {
-    if(posts.value.length > 0) {
-      return posts.value.find(e => e.id === uid)
+    if (posts.value.length > 0) {
+      return posts.value.find((e) => e.id === uid)
     }
 
     const result = await getAPost(uid)
@@ -43,7 +43,7 @@ export const usePostStore = defineStore('post', () => {
     await update(collection, uid, value)
 
     if (posts.value.length > 0) {
-      const index = posts.value.findIndex(e => e.id! === uid)
+      const index = posts.value.findIndex((e) => e.id! === uid)
 
       posts.value[index] = {
         ...posts.value[index],

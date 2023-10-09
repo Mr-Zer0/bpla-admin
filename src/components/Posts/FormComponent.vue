@@ -5,7 +5,6 @@
 
   <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
     <form @submit.prevent="submit">
-
       <div class="col-span-full">
         <label for="title" class="block text-sm font-medium leading-6 text-slate-700">
           Post Title
@@ -48,7 +47,7 @@
             required
             class="w-full rounded-md border-0 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           >
-          <option disabled value="">Select a category</option>
+            <option disabled value="">Select a category</option>
             <option v-for="cat in categories" :key="cat.id" :value="cat.id" v-text="cat.name" />
           </select>
         </div>
@@ -95,19 +94,18 @@
           :value="formSubmit"
         />
       </div>
-
     </form>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { usePostStore } from '@/stores/post';
-import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { usePostStore } from '@/stores/post'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CKEditor from '@ckeditor/ckeditor5-vue'
-import { useCategoryStore } from '@/stores/category';
+import { useCategoryStore } from '@/stores/category'
 
 import type CategoryType from '@/contracts/category.interface'
 
@@ -170,17 +168,14 @@ const submit = async () => {
     }
   }
 
-  await postStore.updatePost(
-    props.uid!,
-    {
-      title: title.value,
-      slug: slug.value,
-      excerpt: excerpt.value,
-      content: content.value,
-      status: status.value,
-      category: cat
-    }
-  )
+  await postStore.updatePost(props.uid!, {
+    title: title.value,
+    slug: slug.value,
+    excerpt: excerpt.value,
+    content: content.value,
+    status: status.value,
+    category: cat
+  })
 
   routerCompose.push({ name: 'posts.home' })
 }

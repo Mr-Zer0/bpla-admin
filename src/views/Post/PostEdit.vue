@@ -9,5 +9,4 @@ import { useRoute } from 'vue-router'
 const routeCompose = useRoute()
 
 let uid = routeCompose.params.id.toString()
-
 </script>

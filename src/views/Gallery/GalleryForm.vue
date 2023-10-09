@@ -4,9 +4,7 @@
   </section>
 
   <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
-
     <form @submit.prevent="submit">
-
       <div class="col-span-full">
         <label for="title" class="block text-sm font-medium leading-6 text-slate-700">
           Gallery Title
@@ -67,21 +65,21 @@
           value="Submit"
         />
       </div>
-
     </form>
-
   </section>
 </template>
 
 <script setup lang="ts">
-import { useGalleryStore } from '@/stores/gallery';
-import { ref } from 'vue';
+import { useGalleryStore } from '@/stores/gallery'
+import { ref } from 'vue'
 
 const title = ref('')
 const slug = ref('')
 const description = ref('')
-const status = ref('published')
 const featured = ref(false)
+const status = ref('published')
+
+const galleryStore = useGalleryStore()
 
 const submit = async () => {
   const payload = {
@@ -91,8 +89,8 @@ const submit = async () => {
     status: status.value,
     featured: featured.value
   }
-  
-  
+
+  await galleryStore.create(payload)
 }
 
 const draft = () => {

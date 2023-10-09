@@ -1,9 +1,9 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
-import { add, getAll, getOne, update as updateGallery } from "@/firebase/model";
+import { ref } from 'vue'
+import { defineStore } from 'pinia'
+import { add, getAll, getOne, update as updateGallery } from '@/firebase/model'
 
-import type GalleryType from "@/contracts/gallery.interface";
-import type { QueryDocumentSnapshot } from "firebase/firestore";
+import type GalleryType from '@/contracts/gallery.interface'
+import type { QueryDocumentSnapshot } from 'firebase/firestore'
 
 export const useGalleryStore = defineStore('gallery', () => {
   const collection = 'gallery'
@@ -13,15 +13,15 @@ export const useGalleryStore = defineStore('gallery', () => {
     if (force || galleries.value.length === 0) {
       const snapshot = await getAll(collection)
 
-      galleries.value = snapshot.docs.map(x => mapGallery(x))
+      galleries.value = snapshot.docs.map((x) => mapGallery(x))
     }
 
     return galleries.value
   }
 
   const get = async (uid: string) => {
-    if(galleries.value.length > 0) {
-      return galleries.value.find(x => x.id! === uid)
+    if (galleries.value.length > 0) {
+      return galleries.value.find((x) => x.id! === uid)
     }
 
     const snapshot = await getOne(collection, uid)
@@ -42,7 +42,7 @@ export const useGalleryStore = defineStore('gallery', () => {
     await updateGallery(collection, uid, payload)
 
     if (galleries.value.length > 0) {
-      const index = galleries.value.findIndex(x => x.id! === uid)
+      const index = galleries.value.findIndex((x) => x.id! === uid)
 
       galleries.value[index] = {
         ...galleries.value[index],
@@ -69,4 +69,3 @@ const mapGallery = (snapshot: QueryDocumentSnapshot): GalleryType => {
     published: data.modified
   }
 }
-

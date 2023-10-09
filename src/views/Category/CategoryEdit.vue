@@ -74,14 +74,14 @@
 import { updateACategory } from '@/firebase/model'
 import router from '@/router'
 import { useCategoryStore } from '@/stores/category'
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 const id = ref('')
 const name = ref('')
 const slug = ref('')
 const description = ref('')
-const status = ref('published') 
+const status = ref('published')
 
 const categoryStore = useCategoryStore()
 const route = useRoute()
@@ -114,7 +114,7 @@ onMounted(async () => {
 
   const category = categoryStore.getOne(route.params.id.toString())
 
-  if(category) {
+  if (category) {
     id.value = category.id!
     name.value = category.name
     slug.value = category.slug

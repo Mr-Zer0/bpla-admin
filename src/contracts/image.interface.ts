@@ -8,4 +8,4 @@ export default interface ImageType {
   medium_url: string
   thumbnail_url: string
   delete_url: string
-} 
+}

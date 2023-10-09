@@ -4,7 +4,16 @@ import type GalleryType from '@/contracts/gallery.interface'
 import type { DocumentData, DocumentReference, QuerySnapshot } from 'firebase/firestore'
 
 import { db } from '.'
-import { Timestamp, addDoc, collection, getDocs, getDoc, doc, deleteDoc, setDoc } from 'firebase/firestore'
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  deleteDoc,
+  setDoc
+} from 'firebase/firestore'
 
 /**
  * Create a new document
@@ -24,7 +33,11 @@ export const add = async (
   return docRef
 }
 
-export const update = async (col: string, uid: string, payload: CategoryType | PostType | GalleryType): Promise<void> => {
+export const update = async (
+  col: string,
+  uid: string,
+  payload: CategoryType | PostType | GalleryType
+): Promise<void> => {
   payload.modified = Timestamp.now()
 
   await setDoc(doc(db, col, uid), payload, { merge: true })

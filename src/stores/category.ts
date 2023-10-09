@@ -21,7 +21,7 @@ export const useCategoryStore = defineStore('category', () => {
       const querySnapshot = await getAllCategories()
 
       categorySnapshot.value = querySnapshot
-      categories.value = querySnapshot.docs.map(x => mapCategory(x))
+      categories.value = querySnapshot.docs.map((x) => mapCategory(x))
     }
 
     return categories.value
@@ -29,14 +29,14 @@ export const useCategoryStore = defineStore('category', () => {
 
   function removeACategory(id: string) {
     const result = categories.value.filter((item: CategoryType) => item.id !== id)
-    
+
     categories.value = result
 
     return categories.value
   }
 
   const getOne = (uid: string) => {
-    return categories.value.find(element => element.id === uid)
+    return categories.value.find((element) => element.id === uid)
   }
 
   return { categories, fetch, removeACategory, count, empty, getOne }

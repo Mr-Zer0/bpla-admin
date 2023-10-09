@@ -34,9 +34,7 @@
         <router-link :to="'/categories/edit/' + cat.id">
           <PencilSquareIcon class="w-5 text-slate-500 hover:text-slate-700" />
         </router-link>
-        <a href="">
-          
-        </a>
+        <a href=""> </a>
         <button @click="remove(cat)">
           <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
         </button>
@@ -60,14 +58,12 @@ onMounted(async () => {
 })
 
 const remove = async (cat: CategoryType) => {
-  const confirmation = confirm(`Are you sure you want to delete the category! \n "${ cat.name }"`)
+  const confirmation = confirm(`Are you sure you want to delete the category! \n "${cat.name}"`)
 
   if (confirmation) {
-
     await deleteACategory(cat.id!)
 
     categoryStore.removeACategory(cat.id!)
-
   }
 }
 </script>
