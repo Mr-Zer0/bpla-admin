@@ -9,7 +9,7 @@
           >
             <span class="absolute -inset-0.5" />
             <span class="sr-only">Open main menu</span>
-            <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+            <Bars3Icon v-if="!open" class="block h-6 w-6 text-red-800" aria-hidden="true" />
             <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
           </DisclosureButton>
         </div>
@@ -22,7 +22,7 @@
               v-for="item in navigation"
               :key="item.name"
               :to="item.href"
-              class="text-gray-500 border-transparent hover:text-gray-700 hover:border-b-gray-300 border-b-2 border-solid pt-2 px-3 inline-flex items-center text-sm font-medium"
+              class="text-gray-500 border-transparent hover:text-red-600 hover:border-b-red-200 border-b-2 border-solid pt-2 px-3 inline-flex items-center text-sm font-medium"
               aria-current="page"
             >
               {{ item.name }}
@@ -140,7 +140,8 @@ async function logout() {
 
 <style scoped lang="scss">
 .is-active {
-  color: #0f172a;
-  border-bottom: 3px solid #94a3b8;
+  color: #b91c1c;
+  border-bottom: 3px solid #ef4444;
+  background: linear-gradient(180deg, rgba(239,68,68,0) 50%, rgba(239,68,68,0.06) 100%);
 }
 </style>
