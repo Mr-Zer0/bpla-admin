@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { reactive, ref, toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import { add, getAll, getOne, update as updateGallery } from '@/firebase/model'
 
@@ -33,9 +33,32 @@ export const useGalleryStore = defineStore('gallery', () => {
   }
 
   const create = async (payload: GalleryType) => {
-    const result = await add(collection, payload)
+    if (payload.images) {
+      console.log('Payload Images are : ', payload.images)
 
-    console.log(result)
+      const temp = payload.images
+
+      console.log('The temp : ', temp)
+
+      // temp.forEach(e => console.log('current : ', e))
+      // const images = temp.map(e => console.log('current : ', e))
+
+      //const imagesArray = Object.getOwnPropertyNames(temp).map(key => temp[key])
+
+      const imagesArray = toRaw(temp)
+
+      console.log('Images Array : ', imagesArray)
+
+      // const images = Object.values(payload.images)
+
+      // console.log('Object.values: ', images)
+    }
+
+    console.log('About to create document with the payload: ', payload)
+
+    // const result = await add(collection, payload)
+
+    // console.log(result)
   }
 
   const update = async (uid: string, payload: GalleryType) => {

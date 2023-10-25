@@ -5,7 +5,8 @@ export default interface ImageType {
   height: number
   size: number
   full_url: string
-  medium_url: string
   thumbnail_url: string
   delete_url: string
+  extension: string
+  mime: string
 }

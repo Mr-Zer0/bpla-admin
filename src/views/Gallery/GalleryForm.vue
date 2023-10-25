@@ -52,25 +52,34 @@
       </div>
 
       <div class="col-span-full mt-5">
-
         <div id="pictup" class="bg-slate-100 w-full h-80 rounded-lg p-4 flex gap-3">
-
-          <form class="w-16 h-16 border-2 border-solid border-slate-400 rounded-md relative text-slate-400">
-
+          <form
+            class="w-16 h-16 border-2 border-solid border-slate-400 rounded-md relative text-slate-400"
+          >
             <input
-              type="file" 
+              type="file"
               name="file[]"
               @change="choose"
               id="file"
               multiple
-              accept="image/*" 
+              accept="image/*"
               class="absolute w-full h-full top-0 left-0 cursor-pointer opacity-0"
+            />
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="-6 -6 36 36"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-full h-full"
             >
-
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-6 -6 36 36" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+              />
             </svg>
-
           </form>
 
           <figure
@@ -78,11 +87,9 @@
             :key="i"
             class="w-16 h-16 rounded-md overflow-hidden"
           >
-            <img :src="img" alt="" class="object-cover w-full h-full">
+            <img :src="img" alt="" class="object-cover w-full h-full" />
           </figure>
-
         </div>
-
       </div>
 
       <div class="mt-6 flex items-center justify-end gap-x-6">
@@ -101,9 +108,14 @@
       </div>
     </form>
   </section>
+
+  <div>
+    <p v-for="(img, i) in images" :key="i" v-text="img.file_name" />
+  </div>
 </template>
 
 <script setup lang="ts">
+import type ImageType from '@/contracts/image.interface'
 import { useGalleryStore } from '@/stores/gallery'
 import { ref } from 'vue'
 
@@ -112,8 +124,9 @@ const slug = ref('')
 const description = ref('')
 const featured = ref(false)
 const status = ref('published')
-const images = ref<Array<File>>([])
+const images = ref<Array<ImageType>>([])
 
+const imageBag = ref<Array<File>>([])
 const pictupImgs = ref<Array<String>>([])
 
 const galleryStore = useGalleryStore()
@@ -123,10 +136,10 @@ const choose = (e: Event) => {
 
   if (files) {
     for (const file of files) {
-      images.value.push(file)
+      imageBag.value.push(file)
 
       const reader = new FileReader()
-      reader.onload = (e: Event) => {
+      reader.onload = (e: ProgressEvent) => {
         e.target && pictupImgs.value.push(e.target.result)
       }
       reader.readAsDataURL(file)
@@ -135,15 +148,57 @@ const choose = (e: Event) => {
 }
 
 const submit = async () => {
-  const payload = {
-    title: title.value,
-    slug: slug.value,
-    description: description.value,
-    status: status.value,
-    featured: featured.value
-  }
+  console.log('reach here')
 
-  await galleryStore.create(payload)
+  const uploadPromise = new Promise((resolve) => {
+    imageBag.value.forEach(async (item) => {
+      const response = await upload(item)
+      const { data } = await response.json()
+
+      // images.value.push({
+      //   id: data.id,
+      //   file_name: data.image.filename,
+      //   width: data.width,
+      //   height: data.height,
+      //   size: data.size,
+      //   full_url: data.display_url,
+      //   thumbnail_url: data.thumb.url,
+      //   delete_url: data.delete_url,
+      //   extension: data.image.extension,
+      //   mime: data.image.mime
+      // })
+      images.value.push(data)
+    })
+
+    resolve('')
+  })
+
+  uploadPromise.then(async () => {
+    const payload = {
+      title: title.value,
+      slug: slug.value,
+      description: description.value,
+      images: images.value,
+      status: status.value,
+      featured: featured.value
+    }
+
+    await galleryStore.create(payload)
+  })
+}
+
+const upload = async (file: File): Promise<Response> => {
+  const imgbb = 'https://api.imgbb.com/1/upload?key=' + import.meta.env.VITE_IMGBB_KEY
+
+  const formData = new FormData()
+  formData.append('image', file)
+
+  const response = await fetch(imgbb, {
+    method: 'POST',
+    body: formData
+  })
+
+  return response
 }
 
 const draft = () => {

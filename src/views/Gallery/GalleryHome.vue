@@ -11,7 +11,6 @@
   </section>
 
   <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200">
-
     <div
       v-for="(gallery, i) in galleries"
       :key="gallery.id"
@@ -41,16 +40,15 @@
         </button>
       </div>
     </div>
-
   </section>
 </template>
 
 <script setup lang="ts">
-import type GalleryType from '@/contracts/gallery.interface';
-import { useGalleryStore } from '@/stores/gallery';
+import type GalleryType from '@/contracts/gallery.interface'
+import { useGalleryStore } from '@/stores/gallery'
 import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/outline'
-import { onMounted } from 'vue';
-import { ref } from 'vue';
+import { onMounted } from 'vue'
+import { ref } from 'vue'
 
 const galleryStore = useGalleryStore()
 
@@ -63,5 +61,4 @@ onMounted(async () => {
 const remove = (gallery: GalleryType) => {
   console.log(gallery)
 }
-
 </script>

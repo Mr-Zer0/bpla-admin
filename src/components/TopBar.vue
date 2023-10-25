@@ -142,6 +142,6 @@ async function logout() {
 .is-active {
   color: #b91c1c;
   border-bottom: 3px solid #ef4444;
-  background: linear-gradient(180deg, rgba(239,68,68,0) 50%, rgba(239,68,68,0.06) 100%);
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0) 50%, rgba(239, 68, 68, 0.06) 100%);
 }
 </style>
