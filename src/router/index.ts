@@ -17,6 +17,8 @@ import GalleryIndex from '@/views/Gallery/GalleryIndex.vue'
 import GalleryHome from '@/views/Gallery/GalleryHome.vue'
 import GalleryForm from '@/views/Gallery/GalleryForm.vue'
 
+import SettingView from '@/views/SettingView.vue'
+
 import ErrorView from '@/views/ErrorView.vue'
 
 import { currentUser } from '@/firebase/fireauth'
@@ -97,6 +99,11 @@ const router = createRouter({
         //   component: PostEdit
         // }
       ]
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingView
     },
     {
       path: '/about',

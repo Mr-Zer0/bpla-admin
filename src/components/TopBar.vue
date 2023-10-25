@@ -128,7 +128,7 @@ const navigation = [
   { name: 'Categories', href: '/categories', current: current.startsWith('/categories') },
   { name: 'Posts', href: '/posts', current: current.startsWith('/posts') },
   { name: 'Gallery', href: '/gallery', current: false },
-  { name: 'Settings', href: '/#', current: false }
+  { name: 'Settings', href: '/settings', current: false }
 ]
 
 async function logout() {

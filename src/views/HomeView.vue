@@ -24,7 +24,7 @@ const actions = [
     icon: RectangleStackIcon,
     name: 'Add Gallery',
     description: 'Manage photo gallery to get engagement from public',
-    link: '#'
+    link: '/gallery/create'
   },
   {
     icon: WrenchScrewdriverIcon,
