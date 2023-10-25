@@ -1,51 +1,53 @@
 <template>
-  <section class="flex justify-between items-center">
-    <h3 class="text-3xl font-semibold">Posts</h3>
+  <Layout>
+    <section class="flex justify-between items-center">
+      <h3 class="text-3xl font-semibold">Posts</h3>
 
-    <router-link
-      to="/posts/create"
-      class="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-    >
-      Create
-    </router-link>
-  </section>
+      <router-link
+        to="/posts/create"
+        class="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      >
+        Create
+      </router-link>
+    </section>
 
-  <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200">
-    <article
-      v-for="(post, i) in posts"
-      :key="post.id"
-      :class="[
-        i === postStore.count - 1 ? '' : 'border-b border-solid border-slate-200',
-        'px-5 py-3 flex justify-between'
-      ]"
-    >
-      <div>
-        <h3 v-text="post.title" class="text-lg" />
-        <div class="flex flex-row items-center gap-3 text-slate-500 mt-5 font-light">
-          <CalendarIcon class="w-4 h-4" />
-          <time datetime="{{ post.created }}" class="text-sm">
-            {{ new Intl.DateTimeFormat('en-US').format(post.created) }}
-          </time>
+    <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200">
+      <article
+        v-for="(post, i) in posts"
+        :key="post.id"
+        :class="[
+          i === postStore.count - 1 ? '' : 'border-b border-solid border-slate-200',
+          'px-5 py-3 flex justify-between'
+        ]"
+      >
+        <div>
+          <h3 v-text="post.title" class="text-lg" />
+          <div class="flex flex-row items-center gap-3 text-slate-500 mt-5 font-light">
+            <CalendarIcon class="w-4 h-4" />
+            <time datetime="{{ post.created }}" class="text-sm">
+              {{ new Intl.DateTimeFormat('en-US').format(post.created) }}
+            </time>
 
-          <TagIcon class="w-4 h-4 ml-4" />
-          <!-- <p v-text="post.category" class="text-sm" /> -->
-          <p class="text-sm">Category</p>
+            <TagIcon class="w-4 h-4 ml-4" />
+            <!-- <p v-text="post.category" class="text-sm" /> -->
+            <p class="text-sm">Category</p>
 
-          <PuzzlePieceIcon class="w-4 h-4 ml-4" />
-          <p class="text-sm" v-text="post.status" />
+            <PuzzlePieceIcon class="w-4 h-4 ml-4" />
+            <p class="text-sm" v-text="post.status" />
+          </div>
         </div>
-      </div>
 
-      <div class="flex flex-wrap md:flex-nowrap items-start gap-2">
-        <router-link :to="'/posts/edit/' + post.id">
-          <PencilSquareIcon class="w-5 h5 text-slate-500 hover:text-slate-700" />
-        </router-link>
-        <button>
-          <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
-        </button>
-      </div>
-    </article>
-  </section>
+        <div class="flex flex-wrap md:flex-nowrap items-start gap-2">
+          <router-link :to="'/posts/edit/' + post.id">
+            <PencilSquareIcon class="w-5 h5 text-slate-500 hover:text-slate-700" />
+          </router-link>
+          <button>
+            <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
+          </button>
+        </div>
+      </article>
+    </section>
+  </Layout>
 </template>
 
 <script setup lang="ts">
@@ -58,6 +60,7 @@ import {
   PencilSquareIcon,
   TrashIcon
 } from '@heroicons/vue/24/outline'
+import Layout from '@/components/Layouts/DefaultLayout.vue'
 
 import type PostType from '@/contracts/post.interface'
 
