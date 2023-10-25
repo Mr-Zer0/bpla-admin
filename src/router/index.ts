@@ -30,34 +30,6 @@ const router = createRouter({
   // linkActiveClass: 'is-active',
   routes: [
     {
-      path: '/',
-      component: LayoutView,
-      children: [
-        {
-          path: '/gallery',
-          name: 'gallery',
-          component: GalleryIndex,
-          children: [
-            {
-              path: '',
-              name: 'gallery.home',
-              component: GalleryHome
-            },
-            {
-              path: 'create',
-              name: 'gallery.create',
-              component: GalleryForm
-            }
-            // {
-            //   path: 'edit/:id',
-            //   name: 'gallery.edit',
-            //   component: PostEdit
-            // }
-          ]
-        }
-      ]
-    },
-    {
       path: '',
       name: 'home',
       component: HomeView
@@ -104,6 +76,28 @@ const router = createRouter({
           name: 'posts.edit',
           component: PostEdit
         }
+      ]
+    },
+    {
+      path: '/gallery',
+      name: 'gallery',
+      component: GalleryIndex,
+      children: [
+        {
+          path: '',
+          name: 'gallery.home',
+          component: GalleryHome
+        },
+        {
+          path: 'create',
+          name: 'gallery.create',
+          component: GalleryForm
+        }
+        // {
+        //   path: 'edit/:id',
+        //   name: 'gallery.edit',
+        //   component: PostEdit
+        // }
       ]
     },
     {
