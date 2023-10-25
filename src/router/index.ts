@@ -34,28 +34,6 @@ const router = createRouter({
       component: LayoutView,
       children: [
         {
-          path: '/categories',
-          name: 'categories',
-          component: CategoryIndex,
-          children: [
-            {
-              path: '',
-              name: 'categories.home',
-              component: CategoryHome
-            },
-            {
-              path: 'create',
-              name: 'categories.create',
-              component: CategoryCreate
-            },
-            {
-              path: 'edit/:id',
-              name: 'category.edit',
-              component: CategoryEdit
-            }
-          ]
-        },
-        {
           path: '/posts',
           name: 'posts',
           component: PostIndex,
@@ -105,6 +83,28 @@ const router = createRouter({
       path: '',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/categories',
+      name: 'categories',
+      component: CategoryIndex,
+      children: [
+        {
+          path: '',
+          name: 'categories.home',
+          component: CategoryHome
+        },
+        {
+          path: 'create',
+          name: 'categories.create',
+          component: CategoryCreate
+        },
+        {
+          path: 'edit/:id',
+          name: 'category.edit',
+          component: CategoryEdit
+        }
+      ]
     },
     {
       path: '/about',
