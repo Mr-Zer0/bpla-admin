@@ -5,6 +5,7 @@ import {
   RectangleStackIcon,
   WrenchScrewdriverIcon
 } from '@heroicons/vue/24/outline'
+import Layout from '@/components/Layouts/DefaultLayout.vue'
 
 const actions = [
   {
@@ -35,16 +36,18 @@ const actions = [
 </script>
 
 <template>
-  <section class="grid grid-cols-2 md:grid-cols-4 gap-5">
-    <router-link
-      v-for="(action, i) in actions"
-      :key="i"
-      :to="action.link"
-      class="border border-solid border-slate-300 rounded-lg bg-white p-4 hover:bg-white/[.75] text-slate-600 hover:text-slate-800"
-    >
-      <component :is="action.icon" class="w-7 h7" />
-      <h5 v-text="action.name" class="font-bold mt-5" />
-      <p v-text="action.description" class="text-sm mt-2" />
-    </router-link>
-  </section>
+  <Layout>
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-5">
+      <router-link
+        v-for="(action, i) in actions"
+        :key="i"
+        :to="action.link"
+        class="border border-solid border-slate-300 rounded-lg bg-white p-4 hover:bg-white/[.75] text-slate-600 hover:text-slate-800"
+      >
+        <component :is="action.icon" class="w-7 h7" />
+        <h5 v-text="action.name" class="font-bold mt-5" />
+        <p v-text="action.description" class="text-sm mt-2" />
+      </router-link>
+    </section>
+  </Layout>
 </template>

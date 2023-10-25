@@ -34,11 +34,6 @@ const router = createRouter({
       component: LayoutView,
       children: [
         {
-          path: '',
-          name: 'home',
-          component: HomeView
-        },
-        {
           path: '/categories',
           name: 'categories',
           component: CategoryIndex,
@@ -105,6 +100,11 @@ const router = createRouter({
           ]
         }
       ]
+    },
+    {
+      path: '',
+      name: 'home',
+      component: HomeView
     },
     {
       path: '/about',
