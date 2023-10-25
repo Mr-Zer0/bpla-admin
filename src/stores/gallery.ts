@@ -1,4 +1,4 @@
-import { reactive, ref, toRaw } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { add, getAll, getOne, update as updateGallery } from '@/firebase/model'
 
@@ -8,6 +8,13 @@ import type { QueryDocumentSnapshot } from 'firebase/firestore'
 export const useGalleryStore = defineStore('gallery', () => {
   const collection = 'gallery'
   const galleries = ref<Array<GalleryType>>([])
+
+  const log = (msg: string) => {
+    const d = new Date()
+    console.log(
+      `[${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}] ${msg}`
+    )
+  } 
 
   const fetch = async (force: boolean = false) => {
     if (force || galleries.value.length === 0) {
@@ -33,32 +40,19 @@ export const useGalleryStore = defineStore('gallery', () => {
   }
 
   const create = async (payload: GalleryType) => {
-    if (payload.images) {
-      console.log('Payload Images are : ', payload.images)
+    log('Func => create function runs')
 
+    if (payload.images) {
       const temp = payload.images
 
       console.log('The temp : ', temp)
-
-      // temp.forEach(e => console.log('current : ', e))
-      // const images = temp.map(e => console.log('current : ', e))
-
-      //const imagesArray = Object.getOwnPropertyNames(temp).map(key => temp[key])
-
-      const imagesArray = toRaw(temp)
-
-      console.log('Images Array : ', imagesArray)
-
-      // const images = Object.values(payload.images)
-
-      // console.log('Object.values: ', images)
     }
 
     console.log('About to create document with the payload: ', payload)
 
-    // const result = await add(collection, payload)
+    const result = await add(collection, payload)
 
-    // console.log(result)
+    console.log(result)
   }
 
   const update = async (uid: string, payload: GalleryType) => {

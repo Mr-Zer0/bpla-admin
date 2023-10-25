@@ -87,7 +87,7 @@
             :key="i"
             class="w-16 h-16 rounded-md overflow-hidden"
           >
-            <img :src="img" alt="" class="object-cover w-full h-full" />
+            <img :src="img.toString()" alt="" class="object-cover w-full h-full" />
           </figure>
         </div>
       </div>
@@ -101,9 +101,10 @@
         </a>
 
         <input
-          class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
+          class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
           type="submit"
           value="Submit"
+          :disabled="!submitable"
         />
       </div>
     </form>
@@ -118,6 +119,8 @@
 import type ImageType from '@/contracts/image.interface'
 import { useGalleryStore } from '@/stores/gallery'
 import { ref } from 'vue'
+
+const submitable = ref(true)
 
 const title = ref('')
 const slug = ref('')
@@ -139,55 +142,63 @@ const choose = (e: Event) => {
       imageBag.value.push(file)
 
       const reader = new FileReader()
-      reader.onload = (e: ProgressEvent) => {
-        e.target && pictupImgs.value.push(e.target.result)
+
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        e.target && pictupImgs.value.push(e.target.result as String)
       }
+
       reader.readAsDataURL(file)
     }
   }
 }
 
 const submit = async () => {
-  console.log('reach here')
+  log('Func => submit function runs')
 
-  const uploadPromise = new Promise((resolve) => {
-    imageBag.value.forEach(async (item) => {
-      const response = await upload(item)
-      const { data } = await response.json()
+  submitable.value = false
 
-      // images.value.push({
-      //   id: data.id,
-      //   file_name: data.image.filename,
-      //   width: data.width,
-      //   height: data.height,
-      //   size: data.size,
-      //   full_url: data.display_url,
-      //   thumbnail_url: data.thumb.url,
-      //   delete_url: data.delete_url,
-      //   extension: data.image.extension,
-      //   mime: data.image.mime
-      // })
-      images.value.push(data)
+  uploadAll(imageBag.value, upload)
+    .then(() => {
+      const payload = {
+        title: title.value,
+        slug: slug.value,
+        description: description.value,
+        images: images.value,
+        status: status.value,
+        featured: featured.value
+      }
+
+      galleryStore.create(payload)
     })
+    .then(() => submitable.value = true)
+}
 
-    resolve('')
-  })
+const uploadAll = async (arr: Array<File>, callback: (file: File) => Promise<Response>): Promise<void> => {
+  log('Func => uploadAll function runs')
 
-  uploadPromise.then(async () => {
-    const payload = {
-      title: title.value,
-      slug: slug.value,
-      description: description.value,
-      images: images.value,
-      status: status.value,
-      featured: featured.value
-    }
+  for (const item of arr) {
+    const resp = await callback(item)
+    const { data } = await resp.json()
 
-    await galleryStore.create(payload)
-  })
+    log('Action => response has been serialized')
+
+    images.value.push({
+      id: data.id,
+      file_name: data.image.filename,
+      width: data.width,
+      height: data.height,
+      size: data.size,
+      full_url: data.display_url,
+      thumbnail_url: data.thumb.url,
+      delete_url: data.delete_url,
+      extension: data.image.extension,
+      mime: data.image.mime
+    })
+  }
 }
 
 const upload = async (file: File): Promise<Response> => {
+  log('Func => upload function runs')
   const imgbb = 'https://api.imgbb.com/1/upload?key=' + import.meta.env.VITE_IMGBB_KEY
 
   const formData = new FormData()
@@ -198,7 +209,17 @@ const upload = async (file: File): Promise<Response> => {
     body: formData
   })
 
+  log('API => an image has been uploaded')
+
   return response
+}
+
+const log = (msg: string) => {
+  const current = new Date()
+
+  console.log(
+    `[${current.getHours()}:${current.getMinutes()}:${current.getSeconds()}.${current.getMilliseconds()}] ${msg}`
+  )
 }
 
 const draft = () => {
