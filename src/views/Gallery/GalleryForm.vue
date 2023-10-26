@@ -23,7 +23,9 @@
         </div>
 
         <div class="col-span-full mt-5">
-          <label for="slug" class="block text-sm font-medium leading-6 text-slate-700"> Slug </label>
+          <label for="slug" class="block text-sm font-medium leading-6 text-slate-700">
+            Slug
+          </label>
           <div class="mt-2">
             <input
               v-model="slug"
@@ -169,10 +171,13 @@ const submit = async () => {
 
       galleryStore.create(payload)
     })
-    .then(() => submitable.value = true)
+    .then(() => (submitable.value = true))
 }
 
-const uploadAll = async (arr: Array<File>, callback: (file: File) => Promise<Response>): Promise<void> => {
+const uploadAll = async (
+  arr: Array<File>,
+  callback: (file: File) => Promise<Response>
+): Promise<void> => {
   log('Func => uploadAll function runs')
 
   for (const item of arr) {

@@ -1,14 +1,8 @@
 <template>
   <Layout>
-
     <section class="w-full">
-      
-      <h1 class="text-4xl text-center">
-        Coming soon ...
-      </h1>
-
+      <h1 class="text-4xl text-center">Coming soon ...</h1>
     </section>
-
   </Layout>
 </template>
 

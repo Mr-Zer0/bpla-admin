@@ -14,7 +14,7 @@ export const useGalleryStore = defineStore('gallery', () => {
     console.log(
       `[${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}] ${msg}`
     )
-  } 
+  }
 
   const fetch = async (force: boolean = false) => {
     if (force || galleries.value.length === 0) {

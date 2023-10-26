@@ -1,8 +1,4 @@
 <template>
-  <section>
-    <h3 class="text-3xl font-semibold text-slate-700" v-text="formTitle" />
-  </section>
-
   <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
     <form @submit.prevent="submit">
       <div class="col-span-full">
@@ -117,7 +113,6 @@ const postStore = usePostStore()
 const categoryStore = useCategoryStore()
 const routerCompose = useRouter()
 
-const formTitle = ref('Create New Post')
 const formSubmit = ref('Create')
 
 const ckeditor = CKEditor.component
@@ -133,7 +128,6 @@ let status = ref('published')
 let categories = ref<Array<CategoryType>>()
 
 if (props.uid) {
-  formTitle.value = 'Edit Post'
   formSubmit.value = 'Update'
 
   onMounted(async () => {

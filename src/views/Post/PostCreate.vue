@@ -1,8 +1,8 @@
 <template>
   <Layout>
-    <section>
-      <h3 class="text-3xl font-semibold text-slate-700">Create New Post</h3>
-    </section>
+    <template v-slot:title>
+      <h3 class="text-2xl font-semibold text-slate-700">Create New Post</h3>
+    </template>
 
     <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
       <form @submit.prevent="submit">
@@ -23,7 +23,9 @@
         </div>
 
         <div class="col-span-full mt-5">
-          <label for="slug" class="block text-sm font-medium leading-6 text-slate-700"> Slug </label>
+          <label for="slug" class="block text-sm font-medium leading-6 text-slate-700">
+            Slug
+          </label>
           <div class="mt-2">
             <input
               v-model="slug"

@@ -1,7 +1,7 @@
 <template>
   <Layout>
-    <section class="flex justify-between items-center">
-      <h3 class="text-3xl font-semibold">Posts</h3>
+    <template v-slot:title>
+      <h3 class="text-2xl font-semibold">Posts</h3>
 
       <router-link
         to="/posts/create"
@@ -9,7 +9,7 @@
       >
         Create
       </router-link>
-    </section>
+    </template>
 
     <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200">
       <article

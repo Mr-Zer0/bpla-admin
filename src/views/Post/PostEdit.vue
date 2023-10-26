@@ -1,5 +1,9 @@
 <template>
   <Layout>
+    <template v-slot:title>
+      <h3 class="text-2xl font-semibold text-slate-700">Edit Post</h3>
+    </template>
+
     <FormComponent :uid="uid" />
   </Layout>
 </template>
