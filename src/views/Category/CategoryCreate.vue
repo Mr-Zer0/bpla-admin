@@ -6,50 +6,26 @@
 
     <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
       <form @submit.prevent="submit" class="w-full max-w-2xl mx-auto">
-        <div class="col-span-full">
-          <label for="name" class="block text-sm font-medium leading-6 text-gray-900">
-            Category Name
-          </label>
-          <div class="mt-2">
-            <input
-              v-model="name"
-              type="text"
-              name="name"
-              id="name"
-              required
-              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
+        <InputElement
+          label="Category Name"
+          v-model="name"
+          name="name"
+          @input="nameInput"
+        />
 
-        <div class="col-span-full mt-5">
-          <label for="slug" class="block text-sm font-medium leading-6 text-gray-900"> Slug </label>
-          <div class="mt-2">
-            <input
-              v-model="slug"
-              type="text"
-              name="slug"
-              id="slug"
-              required
-              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
+        <InputElement
+          label="Category Slug"
+          v-model="slug"
+          name="slug"
+          class="mt-5"
+        />
 
-        <div class="col-span-full mt-5">
-          <label for="description" class="block text-sm font-medium leading-6 text-gray-900">
-            Description
-          </label>
-          <div class="mt-2">
-            <textarea
-              v-model="description"
-              id="description"
-              name="description"
-              rows="3"
-              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            ></textarea>
-          </div>
-        </div>
+        <TextElement 
+          label="Category Description"
+          v-model="description"
+          name="description"
+          class="mt-5"
+        />
 
         <hr class="my-10" />
 
@@ -73,24 +49,31 @@
 </template>
 
 <script setup lang="ts">
-import { addCategory } from '@/firebase/model'
 import router from '@/router'
 import { useCategoryStore } from '@/stores/category'
 import Layout from '@/components/Layouts/DefaultLayout.vue'
+import { ref } from 'vue'
+import InputElement from '@/components/Form/InputElement.vue'
+import TextElement from '@/components/Form/TextElement.vue'
 
-let name = ''
-let slug = ''
+const name = ref<string>('')
+const slug = ref<string>('')
 let description = ''
 let status = 'Published'
 
 const categoryStore = useCategoryStore()
 
+const nameInput = (e: Event) => {
+  const value = (e.target as HTMLInputElement).value
+  slug.value = value.replace(/\s+/g, '-').toLocaleLowerCase()
+}
+
 const submit = async () => {
   console.log('Name : ', name, 'Slug : ', slug, 'Description : ', description, 'Status : ', status)
 
-  await addCategory({
-    name: name,
-    slug: slug,
+  await categoryStore.create({
+    name: name.value,
+    slug: encodeURIComponent(slug.value),
     description: description,
     status: status
   })
