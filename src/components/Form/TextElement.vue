@@ -10,13 +10,12 @@
     />
 
     <div class="mt-2">
-      <input
-        :name="name"
-        :type="type"
-        :value="props.modelValue"
-        :required="props.required"
+      <textarea
+        :name="name" 
+        :cols="props.cols" 
+        :rows="props.rows"
         @input="input"
-        class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
       />
     </div>
   </div>
@@ -27,12 +26,13 @@ const props = withDefaults(defineProps<{
   label: string
   required?: boolean
   modelValue?: string
-  type?: string
   name?: string
   class?: string
+  cols?: number
+  rows?: number
 }>(), {
   required: false,
-  type: 'text'
+  rows: 4
 })
 
 const emit = defineEmits(['update:modelValue'])
