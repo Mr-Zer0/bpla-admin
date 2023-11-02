@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { add, getAllCategories } from '@/firebase/model'
+import { add, getAllCategories, getOne, update as updateCategory } from '@/firebase/model'
 import type CategoryType from '@/contracts/category.interface'
 import type { QuerySnapshot, QueryDocumentSnapshot } from 'firebase/firestore'
 
@@ -36,8 +36,17 @@ export const useCategoryStore = defineStore('category', () => {
     return categories.value
   }
 
-  const getOne = (uid: string) => {
-    return categories.value.find((element) => element.id === uid)
+  const get = async (uid: string) => {
+    if (categories.value.length > 0) {
+      return categories.value.find((element) => element.id === uid)
+    }
+
+    const snapshot = await getOne(collection, uid)
+    const result = snapshot.data()
+
+    result.id = snapshot.id
+
+    return result
   }
 
   const create = async (payload: CategoryType) => {
@@ -50,7 +59,20 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
-  return { categories, fetch, removeACategory, count, empty, getOne, create }
+  const update = async (uid: string, payload: CategoryType) => {
+    await updateCategory(collection, uid, payload)
+
+    if (categories.value.length > 0) {
+      const index = categories.value.findIndex((x) => x.id! === uid)
+
+      categories.value[index] = {
+        ...categories.value[index],
+        ...payload
+      }
+    }
+  }
+
+  return { categories, fetch, removeACategory, count, empty, get, create, update }
 })
 
 /**

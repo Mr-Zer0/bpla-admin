@@ -35,7 +35,7 @@
       <input
         class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         type="submit"
-        value="Submit"
+        :value="props.type === 'create' ? 'Create' : 'Update'"
       />
     </div>
 
@@ -47,21 +47,33 @@ import router from '@/router'
 import InputElement from '@/components/Form/InputElement.vue'
 import TextElement from '@/components/Form/TextElement.vue'
 import { useCategoryStore } from '@/stores/category'
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const props = withDefaults(
   defineProps<{
     type?: string
+    categoryId?: string
   }>(),
   {
     type: 'create'
   }
 )
 
+onMounted(async () => {
+  if(props.type === 'update') {
+    if(props.categoryId) {
+      getData(props.categoryId)
+    } else {
+      throw new Error("! ID NOT FOUND\nUpdate form always require the id to be updated.")
+    }
+  }
+})
+
+const id = ref<string>()
 const name = ref<string>('')
 const slug = ref<string>('')
-let description = ''
-let status = 'published'
+const description = ref<string>('')
+const status = ref('published')
 
 const categoryStore = useCategoryStore()
 
@@ -72,15 +84,14 @@ const nameInput = (e: Event) => {
 
 const submit = async () => {
   console.log(
-    `Name: ${name.value}\nSlug: ${slug.value}\nDescription: ${description}\nStatus: ${status}`
+    `Name: ${name.value}\nSlug: ${slug.value}\nDescription: ${description.value}\nStatus: ${status.value}`
   )
 
-  await categoryStore.create({
-    name: name.value,
-    slug: encodeURIComponent(slug.value),
-    description: description,
-    status: status
-  })
+  if(props.type === 'update') {
+    await update()
+  } else {
+    await create()
+  }
 
   await categoryStore.fetch(true)
 
@@ -88,10 +99,40 @@ const submit = async () => {
 }
 
 const draft = async () => {
-  status = 'drafted'
+  status.value = 'drafted'
 
   await submit()
 
-  status = 'published'
+  status.value = 'published'
+}
+
+const create = async () => {
+  await categoryStore.create({
+    name: name.value,
+    slug: encodeURIComponent(slug.value),
+    description: description.value,
+    status: status.value
+  })
+}
+
+const update = async () => {
+  await categoryStore.update(props.categoryId, {
+    name: name.value,
+    slug: encodeURIComponent(slug.value),
+    description: description.value,
+    status: status.value
+  })
+}
+
+const getData = async (catId: string) => {
+  const category = await categoryStore.get(catId)
+
+  if (category) {
+    id.value = category.id!
+    name.value = category.name
+    slug.value = category.slug
+    description.value = category.description
+    // status.value = category.status
+  }
 }
 </script>
