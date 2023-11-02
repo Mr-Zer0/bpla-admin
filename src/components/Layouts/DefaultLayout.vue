@@ -13,7 +13,7 @@
 import TopBar from '@/components/TopBar.vue'
 
 const props = withDefaults(defineProps<{
-  enable_title: boolean
+  enable_title?: boolean
 }>(), {
   enable_title: () => true
 })

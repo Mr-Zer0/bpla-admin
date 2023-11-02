@@ -30,7 +30,7 @@ const actions = [
     icon: WrenchScrewdriverIcon,
     name: 'Make Changes',
     description: 'Tune the system to get the best experience.',
-    link: '#'
+    link: '/settings'
   }
 ]
 </script>
