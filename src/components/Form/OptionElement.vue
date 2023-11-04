@@ -5,6 +5,7 @@
     <slot name="lable">
 
       <label
+        v-if="props.label"
         :for="props.name" 
         class="block text-sm font-medium leading-6 text-gray-900 font-semibold"
         v-text="props.label"
@@ -45,8 +46,7 @@ const props = withDefaults(
     }>
   }>(),
   {
-    required: false,
-    label: 'Default Label'
+    required: false
   }
 )
 
