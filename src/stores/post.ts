@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { getAllPosts, getAPost, update } from '@/firebase/model'
 import type PostType from '@/contracts/post.interface'
-import type { QuerySnapshot, QueryDocumentSnapshot } from 'firebase/firestore'
+import { type QuerySnapshot, type QueryDocumentSnapshot, Timestamp, addDoc, collection as coll } from 'firebase/firestore'
+import { db } from '@/firebase'
 
 export const usePostStore = defineStore('post', () => {
   const posts = ref<Array<PostType>>([])
@@ -52,7 +53,23 @@ export const usePostStore = defineStore('post', () => {
     }
   }
 
-  return { posts, fetch, getOne, updatePost, count, empty }
+  const createPost = async (payload: PostType) => {
+    const customPayload = {
+      title: payload.title,
+      slug: payload.slug,
+      category: payload.category,
+      excerpt: payload.excerpt,
+      content: payload.content,
+      status: payload.status,
+      published: payload.published ? Timestamp.fromDate(payload.published) : undefined,
+      modified: Timestamp.now(),
+      created: Timestamp.now()
+    }
+
+    await addDoc(coll(db, 'post'), customPayload)
+  }
+
+  return { posts, fetch, getOne, updatePost, createPost, count, empty }
 })
 
 /**
@@ -71,7 +88,7 @@ const mapPost = (x: QueryDocumentSnapshot): PostType => {
     excerpt: data.excerpt,
     content: data.content,
     status: data.status,
-    published: data.published ? data.published.toDate() : new Date('2021-02-01T00:00:00'),
+    published: data.published ? new Date(data.published.toDate()) : new Date('2021-02-01T00:00:00'),
     created: data.created.toDate(),
     modified: data.modified.toDate()
   }

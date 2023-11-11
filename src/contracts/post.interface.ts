@@ -1,3 +1,4 @@
+import type { Timestamp } from "firebase/firestore"
 export default interface Post {
   id?: string
   title: string

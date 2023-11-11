@@ -14,6 +14,14 @@
         class="mt-5"
       />
 
+      <InputElement
+        label="Published Date"
+        v-model="published"
+        type="date"
+        name="published"
+        class="mt-5"
+      />
+
       <OptionElement
         name="category"
         label="Post Category"
@@ -21,24 +29,6 @@
         :options="catList"
         v-model="category"
       />
-
-      <!-- <div class="col-span-full mt-5">
-        <label for="category" class="block text-sm font-medium leading-6 text-slate-700">
-          Category
-        </label>
-        <div class="mt-2">
-          <select
-            v-model="category"
-            name="category"
-            id="category"
-            required
-            class="w-full rounded-md border-0 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          >
-            <option disabled value="">Select a category</option>
-            <option v-for="cat in categories" :key="cat.id" :value="cat.id" v-text="cat.name" />
-          </select>
-        </div>
-      </div> -->
 
       <TextElement 
         label="Post Excerpt"
@@ -52,7 +42,7 @@
           Post Content
         </label>
         <div class="mt-2 document-editor__editable-container">
-          <ckeditor :editor="ClassicEditor" v-model="content" :config="ckConfig"></ckeditor>
+          <ckeditor :editor="ClassicEditor" v-model="content" :config="ckConfig" />
         </div>
       </div>
 
@@ -110,38 +100,55 @@ const formSubmit = ref('Create')
 const ckeditor = CKEditor.component
 const ckConfig = {}
 
-let title = ref('')
-let slug = ref('')
-let excerpt = ref('')
-let content = ref('')
-let category = ref('')
-let status = ref('published')
+const title = ref('')
+const slug = ref('')
+const published = ref('')
+const excerpt = ref('')
+const content = ref('')
+const category = ref('')
+const status = ref('published')
 
-let categories = ref<Array<CategoryType>>()
+const categories = ref<Array<CategoryType>>()
 const catList = ref<Array<{
   value: string
   text: string
 }>>([])
 
-if (props.uid) {
-  formSubmit.value = 'Update'
+onMounted(async () => {
 
-  onMounted(async () => {
-    categories.value = await categoryStore.fetch()
+  categories.value = await categoryStore.fetch()
+  catList.value = categories.value.map(x => { return { value: x.id!, text: x.name }})
 
-    catList.value = categories.value.map(x => { return { value: x.id!, text: x.name }})
+  if (props.uid) {
+    formSubmit.value = 'Update'
 
     const result = await postStore.getOne(props.uid!)
 
     if (!result) routerCompose.push({ name: 'NotFound' })
 
+    let publishedDate
+
+    if (result.published) {
+      const d = result.published.toDate()
+
+      publishedDate = d.getFullYear()
+      publishedDate += '-'
+      publishedDate += String(d.getMonth() + 1).padStart(2, '0')
+      publishedDate += '-'
+      publishedDate += String(d.getDate()).padStart(2, '0')
+
+      console.log(publishedDate)
+    }
+
     title.value = result.title
     slug.value = result.slug
+    published.value = publishedDate
     excerpt.value = result.excerpt
     content.value = result.content
     category.value = result.category.id
-  })
-}
+  }
+
+})
 
 const submit = async () => {
   const result = categories.value?.find(({ id }) => id === category.value)
@@ -160,14 +167,21 @@ const submit = async () => {
     }
   }
 
-  await postStore.updatePost(props.uid!, {
+  const payload = {
     title: title.value,
     slug: slug.value,
+    published: new Date(published.value),
     excerpt: excerpt.value,
     content: content.value,
     status: status.value,
     category: cat
-  })
+  }
+
+  if (props.uid) {
+    await postStore.updatePost(props.uid, payload)
+  } else {
+    await postStore.createPost(payload)
+  }
 
   routerCompose.push({ name: 'posts.home' })
 }
@@ -180,3 +194,63 @@ const draft = () => {
   status.value = 'published'
 }
 </script>
+
+<style lang="scss">
+.ck-content {
+  height: 500px;
+
+  font-family:
+    Inter,
+    Walone,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  font-weight: 400;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #ee382a;
+  }
+  h1 {
+    font-size: calc(1.375rem + 1.5vw);
+  }
+  h2 {
+    font-size: calc(1.325rem + 0.9vw);
+  }
+  h3 {
+    font-size: calc(1.3rem + 0.6vw);
+  }
+  h4 {
+    font-size: calc(1.275rem + 0.3vw);
+  }
+  h5 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  h6 {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  p {
+    line-height: 1.6rem;
+    padding-top: 0.95rem;
+    padding-bottom: 0.95rem;
+  }
+
+  ul,
+  ol {
+    margin-left: 1.5rem;
+
+    li {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+    }
+  }
+}
+</style>
