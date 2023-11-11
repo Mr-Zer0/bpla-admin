@@ -12,6 +12,12 @@
 
     </slot>
 
+    <slot name="editor">
+
+      
+
+    </slot>
+
   </div>
 </template>
 

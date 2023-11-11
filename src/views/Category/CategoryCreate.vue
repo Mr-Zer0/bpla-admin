@@ -12,5 +12,6 @@
 </template>
 
 <script setup lang="ts">
+import Layout from '@/components/Layouts/DefaultLayout.vue'
 import FormComponent from '@/components/Categories/FormComponent.vue'
 </script>

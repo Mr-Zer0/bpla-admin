@@ -1,4 +1,3 @@
-import type { Timestamp } from "firebase/firestore"
 export default interface Post {
   id?: string
   title: string
@@ -7,7 +6,7 @@ export default interface Post {
   excerpt: string
   status: string
   content: string
-  published?: Date
+  published: Date
   created?: Date
   modified?: Date
 }

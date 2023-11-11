@@ -25,12 +25,11 @@
           <div class="flex flex-row items-center gap-3 text-slate-500 mt-5 font-light">
             <CalendarIcon class="w-4 h-4" />
             <time datetime="{{ post.created }}" class="text-sm">
-              {{ new Intl.DateTimeFormat('en-US').format(post.created) }}
+              {{ new Intl.DateTimeFormat('en-US').format(post.published) }}
             </time>
 
             <TagIcon class="w-4 h-4 ml-4" />
-            <!-- <p v-text="post.category" class="text-sm" /> -->
-            <p class="text-sm">Category</p>
+            <p v-text="post.category.name" class="text-sm" />
 
             <PuzzlePieceIcon class="w-4 h-4 ml-4" />
             <p class="text-sm" v-text="post.status" />
