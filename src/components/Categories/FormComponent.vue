@@ -101,12 +101,14 @@ const create = async () => {
 }
 
 const update = async () => {
-  await categoryStore.update(props.categoryId, {
-    name: name.value,
-    slug: encodeURIComponent(slug.value),
-    description: description.value,
-    status: status.value
-  })
+  if (props.categoryId) {
+    await categoryStore.update(props.categoryId, {
+      name: name.value,
+      slug: encodeURIComponent(slug.value),
+      description: description.value,
+      status: status.value
+    })
+  }
 }
 
 const getData = async (catId: string) => {
