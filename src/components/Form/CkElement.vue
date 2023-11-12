@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="props.class"
-  >
-
+  <div :class="props.class">
     <slot name="label">
       <label
         v-if="props.label"
@@ -15,21 +12,20 @@
     <slot name="editor">
       <div class="mt-2 document-editor__editable-container">
         <ckeditor
-          :editor="ClassicEditor" 
+          :editor="ClassicEditor"
           :value="props.modelValue"
           :config="ckconfig"
           @input="input"
         />
       </div>
     </slot>
-
   </div>
 </template>
 
 <script setup lang="ts">
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import CKEditor from '@ckeditor/ckeditor5-vue'
-import EssentialsPlugin from "@ckeditor/ckeditor5-essentials/src/essentials"
+import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
 
 const ckeditor = CKEditor.component
 const emit = defineEmits(['update:modelValue'])

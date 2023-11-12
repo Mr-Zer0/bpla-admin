@@ -2,7 +2,13 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { getAllPosts, getAPost, update } from '@/firebase/model'
 import type PostType from '@/contracts/post.interface'
-import { type QuerySnapshot, type QueryDocumentSnapshot, Timestamp, addDoc, collection as coll } from 'firebase/firestore'
+import {
+  type QuerySnapshot,
+  type QueryDocumentSnapshot,
+  Timestamp,
+  addDoc,
+  collection as coll
+} from 'firebase/firestore'
 import { db } from '@/firebase'
 
 export const usePostStore = defineStore('post', () => {

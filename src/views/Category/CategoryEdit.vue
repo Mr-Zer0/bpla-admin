@@ -5,10 +5,7 @@
     </section>
 
     <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
-      <FormComponent
-        type="update"
-        :categoryId="$route.params.id.toString()"
-      />
+      <FormComponent type="update" :categoryId="$route.params.id.toString()" />
     </section>
   </Layout>
 </template>

@@ -1,21 +1,10 @@
 <template>
   <form @submit.prevent="submit">
-    
-    <InputElement
-      label="Category Name"
-      v-model="name"
-      name="name"
-      @input="nameInput"
-    />
+    <InputElement label="Category Name" v-model="name" name="name" @input="nameInput" />
 
-    <InputElement
-      label="Category Slug"
-      v-model="slug"
-      name="slug"
-      class="mt-5"
-    />
+    <InputElement label="Category Slug" v-model="slug" name="slug" class="mt-5" />
 
-    <TextElement 
+    <TextElement
       label="Category Description"
       v-model="description"
       name="description"
@@ -25,10 +14,7 @@
     <hr class="my-10" />
 
     <div class="mt-6 flex items-center justify-end gap-x-6">
-      <a
-        class="ext-sm font-semibold leading-6 text-gray-900 cursor-pointer"
-        @click.prevent="draft"
-      >
+      <a class="ext-sm font-semibold leading-6 text-gray-900 cursor-pointer" @click.prevent="draft">
         Save Draft
       </a>
 
@@ -38,7 +24,6 @@
         :value="props.type === 'create' ? 'Create' : 'Update'"
       />
     </div>
-
   </form>
 </template>
 
@@ -47,7 +32,7 @@ import router from '@/router'
 import InputElement from '@/components/Form/InputElement.vue'
 import TextElement from '@/components/Form/TextElement.vue'
 import { useCategoryStore } from '@/stores/category'
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -60,11 +45,11 @@ const props = withDefaults(
 )
 
 onMounted(async () => {
-  if(props.type === 'update') {
-    if(props.categoryId) {
+  if (props.type === 'update') {
+    if (props.categoryId) {
       getData(props.categoryId)
     } else {
-      throw new Error("! ID NOT FOUND\nUpdate form always require the id to be updated.")
+      throw new Error('! ID NOT FOUND\nUpdate form always require the id to be updated.')
     }
   }
 })
@@ -80,14 +65,14 @@ const categoryStore = useCategoryStore()
 const nameInput = (e: Event) => {
   const value = (e.target as HTMLInputElement).value
   slug.value = value.replace(/\s+/g, '-').toLocaleLowerCase()
-} 
+}
 
 const submit = async () => {
   console.log(
     `Name: ${name.value}\nSlug: ${slug.value}\nDescription: ${description.value}\nStatus: ${status.value}`
   )
 
-  if(props.type === 'update') {
+  if (props.type === 'update') {
     await update()
   } else {
     await create()

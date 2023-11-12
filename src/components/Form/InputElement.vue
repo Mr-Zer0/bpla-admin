@@ -1,10 +1,7 @@
 <template>
-  <div
-    :class="[props.class ? props.class + ' ' : '', 'col-span-full']"
-  >
-
+  <div :class="[props.class ? props.class + ' ' : '', 'col-span-full']">
     <label
-      :for="name" 
+      :for="name"
       class="block text-sm font-medium leading-6 text-gray-900 font-semibold"
       v-text="props.label"
     />
@@ -23,17 +20,20 @@
 </template>
 
 <script setup lang="ts">
-const props = withDefaults(defineProps<{
-  label: string
-  required?: boolean
-  modelValue?: string
-  type?: string
-  name?: string
-  class?: string
-}>(), {
-  required: false,
-  type: 'text'
-})
+const props = withDefaults(
+  defineProps<{
+    label: string
+    required?: boolean
+    modelValue?: string
+    type?: string
+    name?: string
+    class?: string
+  }>(),
+  {
+    required: false,
+    type: 'text'
+  }
+)
 
 const emit = defineEmits(['update:modelValue'])
 

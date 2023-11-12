@@ -12,9 +12,12 @@
 <script setup lang="ts">
 import TopBar from '@/components/TopBar.vue'
 
-const props = withDefaults(defineProps<{
-  enable_title?: boolean
-}>(), {
-  enable_title: () => true
-})
+const props = withDefaults(
+  defineProps<{
+    enable_title?: boolean
+  }>(),
+  {
+    enable_title: () => true
+  }
+)
 </script>

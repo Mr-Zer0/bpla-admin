@@ -1,18 +1,9 @@
 <template>
   <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
     <form @submit.prevent="submit">
-      <InputElement
-        label="Post Title"
-        v-model="title"
-        name="title"
-      />
+      <InputElement label="Post Title" v-model="title" name="title" />
 
-      <InputElement
-        label="Post Slug"
-        v-model="slug"
-        name="slug"
-        class="mt-5"
-      />
+      <InputElement label="Post Slug" v-model="slug" name="slug" class="mt-5" />
 
       <InputElement
         label="Published Date"
@@ -30,12 +21,7 @@
         v-model="category"
       />
 
-      <TextElement 
-        label="Post Excerpt"
-        v-model="excerpt"
-        name="excerpt"
-        class="mt-5"
-      />
+      <TextElement label="Post Excerpt" v-model="excerpt" name="excerpt" class="mt-5" />
 
       <div class="col-span-full mt-5">
         <label for="content" class="block text-sm font-medium leading-6 text-slate-700">
@@ -109,15 +95,18 @@ const category = ref('')
 const status = ref('published')
 
 const categories = ref<Array<CategoryType>>()
-const catList = ref<Array<{
-  value: string
-  text: string
-}>>([])
+const catList = ref<
+  Array<{
+    value: string
+    text: string
+  }>
+>([])
 
 onMounted(async () => {
-
   categories.value = await categoryStore.fetch()
-  catList.value = categories.value.map(x => { return { value: x.id!, text: x.name }})
+  catList.value = categories.value.map((x) => {
+    return { value: x.id!, text: x.name }
+  })
 
   if (props.uid) {
     formSubmit.value = 'Update'
@@ -147,7 +136,6 @@ onMounted(async () => {
     content.value = result.content
     category.value = result.category.id
   }
-
 })
 
 const submit = async () => {
