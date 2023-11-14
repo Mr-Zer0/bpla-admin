@@ -32,7 +32,7 @@
         </div>
 
         <div class="flex flex-wrap md:flex-nowrap items-start gap-2">
-          <router-link :to="'/categories/edit/' + gallery.id">
+          <router-link :to="'/gallery/edit/' + gallery.id">
             <PencilSquareIcon class="w-5 text-slate-500 hover:text-slate-700" />
           </router-link>
           <a href=""> </a>
@@ -61,7 +61,19 @@ onMounted(async () => {
   galleries.value = await galleryStore.fetch()
 })
 
-const remove = (gallery: GalleryType) => {
-  console.log(gallery)
+// const remove = (gallery: GalleryType) => {
+//   const confirmation = confirm('Are you sure you want to remove this gallery!')
+
+//   confirmation ? console.log('it will be removed') : console.log('sorry wrong click')
+// }
+
+const remove = async (gallery: GalleryType) => {
+  const confirmation = confirm(`Are you sure you want to delete the category! \n "${gallery.title}"`)
+
+  if (confirmation) {
+    if (gallery.id) {
+      await galleryStore.remove(gallery.id)
+    }
+  }
 }
 </script>

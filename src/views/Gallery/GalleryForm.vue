@@ -6,53 +6,30 @@
 
     <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
       <form @submit.prevent="submit">
-        <div class="col-span-full">
-          <label for="title" class="block text-sm font-medium leading-6 text-slate-700">
-            Gallery Title
-          </label>
-          <div class="mt-2">
-            <input
-              v-model="title"
-              type="text"
-              name="title"
-              id="title"
-              required
-              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
 
-        <div class="col-span-full mt-5">
-          <label for="slug" class="block text-sm font-medium leading-6 text-slate-700">
-            Slug
-          </label>
-          <div class="mt-2">
-            <input
-              v-model="slug"
-              type="text"
-              name="slug"
-              id="slug"
-              required
-              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
+        <input-element
+          type="text"
+          label="Gallery Title"
+          name="title"
+          :required="true"
+          v-model="title"
+        />
 
-        <div class="col-span-full mt-5">
-          <label for="description" class="block text-sm font-medium leading-6 text-slate-700">
-            Gallery Descrption
-          </label>
-          <div class="mt-2">
-            <textarea
-              name="description"
-              id="description"
-              rows="3"
-              v-model="description"
-              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            >
-            </textarea>
-          </div>
-        </div>
+        <input-element
+          type="text"
+          label="Gallery Slug"
+          name="slug"
+          :required="true"
+          v-model="slug"
+          class="mt-5"
+        />
+
+        <text-element
+          name="description"
+          label="Gallery Description"
+          v-model="description"
+          class="mt-5"
+        />
 
         <div class="col-span-full mt-5">
           <div id="pictup" class="bg-slate-100 w-full h-80 rounded-lg p-4 flex gap-3">
@@ -118,22 +95,35 @@
 <script setup lang="ts">
 import type ImageType from '@/contracts/image.interface'
 import { useGalleryStore } from '@/stores/gallery'
+import router from '@/router'
 import { ref } from 'vue'
 import Layout from '@/components/Layouts/DefaultLayout.vue'
+import InputElement from '@/components/Form/InputElement.vue'
+import TextElement from '@/components/Form/TextElement.vue'
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 const submitable = ref(true)
-
 const title = ref('')
 const slug = ref('')
 const description = ref('')
 const featured = ref(false)
 const status = ref('published')
 const images = ref<Array<ImageType>>([])
-
 const imageBag = ref<Array<File>>([])
 const pictupImgs = ref<Array<String>>([])
-
 const galleryStore = useGalleryStore()
+const routeCompose = useRoute()
+
+onMounted(async () => {
+  if(routeCompose.params.id) {
+    const result = await galleryStore.get(routeCompose.params.id.toString())
+
+    title.value = result.title
+    slug.value = result.slug
+    description.value = result.description
+  }
+})
 
 const choose = (e: Event) => {
   const files = e.target && (e.target as HTMLInputElement).files
@@ -158,6 +148,14 @@ const submit = async () => {
 
   submitable.value = false
 
+  if (routeCompose.params.id) {
+    await update()
+  } else {
+    await create()
+  }
+}
+
+const create = async () => {
   uploadAll(imageBag.value, upload)
     .then(() => {
       const payload = {
@@ -171,7 +169,25 @@ const submit = async () => {
 
       galleryStore.create(payload)
     })
-    .then(() => (submitable.value = true))
+    .then(() => {
+      submitable.value = true
+      router.push('/gallery')
+    })
+}
+
+const update = async () => {
+  await galleryStore.update(
+    routeCompose.params.id.toString(),
+    {
+      title: title.value,
+      slug: slug.value,
+      description: description.value,
+      status: status.value,
+      featured: featured.value
+    }
+  )
+  
+  router.push('/gallery')
 }
 
 const uploadAll = async (

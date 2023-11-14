@@ -15,3 +15,10 @@ export const randomString = (len = 8, includeNumber = false) => {
 
   return result
 }
+
+export const catcher = (error: any) => {
+  if (error instanceof Error) {
+    console.log(`Error: ${error.name}\nMessage: ${error.message}`)
+  }
+  console.log('Error: ' + String(error))
+}

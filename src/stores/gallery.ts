@@ -3,7 +3,9 @@ import { defineStore } from 'pinia'
 import { add, getAll, getOne, update as updateGallery } from '@/firebase/model'
 
 import type GalleryType from '@/contracts/gallery.interface'
-import type { QueryDocumentSnapshot } from 'firebase/firestore'
+import { deleteDoc, doc, type QueryDocumentSnapshot } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { catcher } from '@/util'
 
 export const useGalleryStore = defineStore('gallery', () => {
   const collection = 'gallery'
@@ -68,7 +70,18 @@ export const useGalleryStore = defineStore('gallery', () => {
     }
   }
 
-  return { galleries, fetch, get, create, update }
+  const remove = async (uid: string) => {
+    try {
+      await deleteDoc(doc(db, 'gallery', uid))
+    } catch (e) {
+      catcher(e)
+    }
+
+    const index = galleries.value.findIndex(x => x.id === uid)
+    galleries.value.splice(index, 1)
+  }
+
+  return { galleries, fetch, get, create, update, remove }
 })
 
 const mapGallery = (snapshot: QueryDocumentSnapshot): GalleryType => {
