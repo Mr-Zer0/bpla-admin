@@ -6,7 +6,6 @@
 
     <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200 p-7">
       <form @submit.prevent="submit">
-
         <input-element
           type="text"
           label="Gallery Title"
@@ -116,7 +115,7 @@ const galleryStore = useGalleryStore()
 const routeCompose = useRoute()
 
 onMounted(async () => {
-  if(routeCompose.params.id) {
+  if (routeCompose.params.id) {
     const result = await galleryStore.get(routeCompose.params.id.toString())
 
     title.value = result.title
@@ -176,17 +175,14 @@ const create = async () => {
 }
 
 const update = async () => {
-  await galleryStore.update(
-    routeCompose.params.id.toString(),
-    {
-      title: title.value,
-      slug: slug.value,
-      description: description.value,
-      status: status.value,
-      featured: featured.value
-    }
-  )
-  
+  await galleryStore.update(routeCompose.params.id.toString(), {
+    title: title.value,
+    slug: slug.value,
+    description: description.value,
+    status: status.value,
+    featured: featured.value
+  })
+
   router.push('/gallery')
 }
 

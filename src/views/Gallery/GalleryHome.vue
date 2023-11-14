@@ -68,7 +68,9 @@ onMounted(async () => {
 // }
 
 const remove = async (gallery: GalleryType) => {
-  const confirmation = confirm(`Are you sure you want to delete the category! \n "${gallery.title}"`)
+  const confirmation = confirm(
+    `Are you sure you want to delete the category! \n "${gallery.title}"`
+  )
 
   if (confirmation) {
     if (gallery.id) {

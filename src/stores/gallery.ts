@@ -77,7 +77,7 @@ export const useGalleryStore = defineStore('gallery', () => {
       catcher(e)
     }
 
-    const index = galleries.value.findIndex(x => x.id === uid)
+    const index = galleries.value.findIndex((x) => x.id === uid)
     galleries.value.splice(index, 1)
   }
 
