@@ -113,10 +113,9 @@ onMounted(async () => {
 
     const result = await postStore.getOne(props.uid!)
 
-    if (!result) { 
-      routerCompose.push({ name: 'NotFound' }) 
+    if (!result) {
+      routerCompose.push({ name: 'NotFound' })
     } else {
-
       let publishedDate
 
       if (result.published) {
@@ -137,7 +136,6 @@ onMounted(async () => {
       excerpt.value = result.excerpt
       content.value = result.content
       category.value = result.category.id
-
     }
   }
 })
