@@ -7,9 +7,13 @@ import {
   type QueryDocumentSnapshot,
   Timestamp,
   addDoc,
-  collection as coll
+  collection as coll,
+  doc,
+  getDoc,
+  DocumentSnapshot
 } from 'firebase/firestore'
 import { db } from '@/firebase'
+import { catcher } from '@/util'
 
 export const usePostStore = defineStore('post', () => {
   const posts = ref<Array<PostType>>([])
@@ -41,9 +45,16 @@ export const usePostStore = defineStore('post', () => {
       return posts.value.find((e) => e.id === uid)
     }
 
-    const result = await getAPost(uid)
+    try {
 
-    return result.data()
+      const docRef = doc(db, collection, uid)
+      const result = await getDoc(docRef)
+
+      return mapPost(result)
+
+    } catch (error) {
+      catcher(error)
+    }
   }
 
   const updatePost = async (uid: string, value: PostType) => {
@@ -83,19 +94,23 @@ export const usePostStore = defineStore('post', () => {
  * @param x QueryDocumentSnapshot
  * @returns PostType
  */
-const mapPost = (x: QueryDocumentSnapshot): PostType => {
+  // const mapPost = (x: QueryDocumentSnapshot): PostType => {
+const mapPost = (x: DocumentSnapshot): PostType|undefined => {
   const data = x.data()
 
-  return {
-    id: x.id,
-    title: data.title,
-    slug: data.slug,
-    category: data.category,
-    excerpt: data.excerpt,
-    content: data.content,
-    status: data.status,
-    published: data.published ? new Date(data.published.toDate()) : new Date('2021-02-01T00:00:00'),
-    created: data.created.toDate(),
-    modified: data.modified.toDate()
+  if (data) {
+    return {
+      id: x.id,
+      title: data.title,
+      slug: data.slug,
+      category: data.category,
+      excerpt: data.excerpt,
+      content: data.content,
+      status: data.status,
+      published: data.published ? new Date(data.published.toDate()) : new Date('2021-02-01T00:00:00'),
+      created: data.created.toDate(),
+      modified: data.modified.toDate()
+    }
   }
+  return undefined
 }

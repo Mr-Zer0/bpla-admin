@@ -61,12 +61,6 @@ onMounted(async () => {
   galleries.value = await galleryStore.fetch()
 })
 
-// const remove = (gallery: GalleryType) => {
-//   const confirmation = confirm('Are you sure you want to remove this gallery!')
-
-//   confirmation ? console.log('it will be removed') : console.log('sorry wrong click')
-// }
-
 const remove = async (gallery: GalleryType) => {
   const confirmation = confirm(
     `Are you sure you want to delete the category! \n "${gallery.title}"`

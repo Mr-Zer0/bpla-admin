@@ -113,28 +113,32 @@ onMounted(async () => {
 
     const result = await postStore.getOne(props.uid!)
 
-    if (!result) routerCompose.push({ name: 'NotFound' })
+    if (!result) { 
+      routerCompose.push({ name: 'NotFound' }) 
+    } else {
 
-    let publishedDate
+      let publishedDate
 
-    if (result.published) {
-      const d = result.published.toDate()
+      if (result.published) {
+        const d = result.published
 
-      publishedDate = d.getFullYear()
-      publishedDate += '-'
-      publishedDate += String(d.getMonth() + 1).padStart(2, '0')
-      publishedDate += '-'
-      publishedDate += String(d.getDate()).padStart(2, '0')
+        console.log(d)
 
-      console.log(publishedDate)
+        publishedDate = d.getFullYear().toString()
+        publishedDate += '-'
+        publishedDate += String(d.getMonth() + 1).padStart(2, '0')
+        publishedDate += '-'
+        publishedDate += String(d.getDate()).padStart(2, '0')
+      }
+
+      title.value = result.title
+      slug.value = result.slug
+      published.value = publishedDate!
+      excerpt.value = result.excerpt
+      content.value = result.content
+      category.value = result.category.id
+
     }
-
-    title.value = result.title
-    slug.value = result.slug
-    published.value = publishedDate
-    excerpt.value = result.excerpt
-    content.value = result.content
-    category.value = result.category.id
   }
 })
 
