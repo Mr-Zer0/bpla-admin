@@ -12,12 +12,12 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^39.0.2",
-    "@ckeditor/ckeditor5-vue": "^5.1.0",
     "@headlessui/vue": "^1.7.16",
     "@heroicons/vue": "^2.0.18",
+    "@tinymce/tinymce-vue": "^5.1.1",
     "firebase": "^10.3.1",
     "pinia": "^2.1.6",
+    "tinymce": "^6.7.3",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },

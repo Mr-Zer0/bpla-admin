@@ -21,14 +21,14 @@
         v-model="category"
       />
 
-      <TextElement label="Post Excerpt" v-model="excerpt" name="excerpt" class="mt-5" />
+      <text-element label="Post Excerpt" v-model="excerpt" name="excerpt" class="mt-5" />
 
       <div class="col-span-full mt-5">
         <label for="content" class="block text-sm font-medium leading-6 text-slate-700">
           Post Content
         </label>
         <div class="mt-2 document-editor__editable-container">
-          <ckeditor :editor="ClassicEditor" v-model="content" :config="ckConfig" />
+          <editor :init="init" :api-key="key" v-model="content" />
         </div>
       </div>
 
@@ -57,15 +57,14 @@ import { ref } from 'vue'
 import { usePostStore } from '@/stores/post'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import CKEditor from '@ckeditor/ckeditor5-vue'
+import Editor from '@tinymce/tinymce-vue'
 import { useCategoryStore } from '@/stores/category'
-
 import InputElement from '../Form/InputElement.vue'
 import TextElement from '../Form/TextElement.vue'
 import OptionElement from '../Form/OptionElement.vue'
 
 import type CategoryType from '@/contracts/category.interface'
+import type { Editor as EditorType } from 'tinymce'
 
 const props = withDefaults(
   defineProps<{
@@ -77,14 +76,31 @@ const props = withDefaults(
   }
 )
 
+const init = {
+  menubar: false,
+  plugins: [
+    'image',
+    'link',
+    'lists',
+    'media',
+    'searchreplace',
+    'table',
+    'mediaembed',
+    'advtable',
+    'editimage',
+    'tableofcontents',
+    'powerpaste',
+    'typography'
+  ],
+  toolbar:
+    'undo redo | blocks | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | removeformat'
+}
+const key = import.meta.env.VITE_TINY_KEY
 const postStore = usePostStore()
 const categoryStore = useCategoryStore()
 const routerCompose = useRouter()
 
 const formSubmit = ref('Create')
-
-const ckeditor = CKEditor.component
-const ckConfig = {}
 
 const title = ref('')
 const slug = ref('')
@@ -186,6 +202,12 @@ const draft = () => {
 </script>
 
 <style lang="scss">
+.test {
+  p {
+    color: red;
+  }
+}
+
 .ck-content {
   height: 500px;
 
