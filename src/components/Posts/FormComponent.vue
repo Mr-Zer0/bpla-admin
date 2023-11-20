@@ -64,7 +64,6 @@ import TextElement from '../Form/TextElement.vue'
 import OptionElement from '../Form/OptionElement.vue'
 
 import type CategoryType from '@/contracts/category.interface'
-import type { Editor as EditorType } from 'tinymce'
 
 const props = withDefaults(
   defineProps<{

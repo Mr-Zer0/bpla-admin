@@ -62,6 +62,14 @@
             </form>
 
             <figure
+              v-for="(img, i) in exImages"
+              :key="i"
+              class="w-16 h-16 rounded-md overflow-hidden"
+            >
+              <img :src="img" alt="" class="object-cover w-full h-full" />
+            </figure>
+
+            <figure
               v-for="(img, i) in pictupImgs"
               :key="i"
               class="w-16 h-16 rounded-md overflow-hidden"
@@ -114,6 +122,8 @@ const pictupImgs = ref<Array<String>>([])
 const galleryStore = useGalleryStore()
 const routeCompose = useRoute()
 
+const exImages = ref<Array<string>>([])
+
 onMounted(async () => {
   if (routeCompose.params.id) {
     const result = await galleryStore.get(routeCompose.params.id.toString())
@@ -121,6 +131,8 @@ onMounted(async () => {
     title.value = result.title
     slug.value = result.slug
     description.value = result.description
+    images.value = result.images
+    exImages.value = images.value.map((x) => x.thumbnail_url)
   }
 })
 
