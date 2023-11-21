@@ -11,6 +11,41 @@
       </router-link>
     </template>
 
+    <section class="mt-8 flex flex-row gap-6">
+      <button
+        :class="[
+          current === 'all' ? 'rounded-full border border-red-600 bg-red-500 text-white' : '',
+          'px-5 py-1'
+        ]"
+        @click="filter('all')"
+        v-text="'All'"
+      />
+      <button
+        :class="[
+          current === 'news' ? 'rounded-full border border-red-600 bg-red-500 text-white' : '',
+          'px-5 py-1'
+        ]"
+        @click="filter('news')"
+        v-text="'News'"
+      />
+      <button
+        :class="[
+          current === 'message' ? 'rounded-full border border-red-600 bg-red-500 text-white' : '',
+          'px-5 py-1'
+        ]"
+        @click="filter('message')"
+        v-text="'Messages'"
+      />
+      <button
+        :class="[
+          current === 'policy' ? 'rounded-full border border-red-600 bg-red-500 text-white' : '',
+          'px-5 py-1'
+        ]"
+        @click="filter('policy')"
+        v-text="'Policies'"
+      />
+    </section>
+
     <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200">
       <article
         v-for="(post, i) in posts"
@@ -65,8 +100,17 @@ import type PostType from '@/contracts/post.interface'
 
 const posts = ref<Array<PostType>>()
 const postStore = usePostStore()
+const current = ref('')
 
 onMounted(async () => {
-  posts.value = await postStore.fetch()
+  filter('news')
 })
+
+const filter = async (cur: string) => {
+  if (cur !== 'all') {
+    posts.value = await postStore.getByCategory(cur)
+  }
+
+  current.value = cur
+}
 </script>
