@@ -1,33 +1,38 @@
 <template>
-  <div :class="[props.class ? props.class + ' ' : '', 'col-span-full']">
-    <label
-      :for="name"
-      class="block text-sm font-medium leading-6 text-gray-900 font-semibold"
-      v-text="props.label"
-    />
-
-    <div class="mt-2">
-      <input
-        :name="name"
-        :type="type"
-        :value="props.modelValue"
-        :required="props.required"
-        @input="input"
-        class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+  <div>
+    <slot name="label">
+      <label
+        v-if="props.label"
+        :for="name"
+        class="block text-sm font-medium leading-6 text-gray-900 font-semibold"
+        v-text="props.label"
       />
-    </div>
+    </slot>
+
+    <slot name="body">
+      <div class="mt-2">
+        <input
+          :name="name"
+          :type="type"
+          :value="props.modelValue"
+          :required="props.required"
+          @input="input"
+          class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        />
+      </div>
+    </slot>
   </div>
 </template>
 
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    label: string
+    label?: string
     required?: boolean
     modelValue?: string
     type?: string
     name?: string
-    class?: string
+    placeholder?: string
   }>(),
   {
     required: false,

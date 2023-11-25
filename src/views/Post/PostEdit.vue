@@ -4,7 +4,7 @@
       <h3 class="text-2xl font-semibold text-slate-700">Edit Post</h3>
     </template>
 
-    <FormComponent :uid="uid" />
+    <FormComponent :uid="uid" type="edit" />
   </Layout>
 </template>
 
