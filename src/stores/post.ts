@@ -22,71 +22,41 @@ export const usePostStore = defineStore('post', () => {
   const posts = ref<Array<PostType>>([])
   const postSnapshot = ref<QuerySnapshot>()
 
-  const messages = ref<Array<PostType>>()
-  const news = ref<Array<PostType>>()
-  const policies = ref<Array<PostType>>()
-
   const collection = 'post'
   const postRef = coll(db, 'post')
 
   const count = computed(() => (postSnapshot.value ? postSnapshot.value.size : 0))
   const empty = computed(() => (postSnapshot.value ? postSnapshot.value.empty : true))
+  const hasCategory = (slug: string) => {
+    if (posts.value) {
+      const result = posts.value.find((x) => x.category.slug === slug)
 
-  const fetchPost = async (cat: string, state: any) => {
-    const q = query(postRef, where('category.slug', '==', cat), orderBy('created', 'desc'))
-
-    try {
-      const result = await getDocs(q)
-      const mapped = result.docs.map((x) => mapPost(x))
-      posts.value = posts.value ? posts.value.concat(mapped) : mapped
-      state.value = mapped
-    } catch (error) {
-      catcher(error)
+      return result ? true : false
     }
+
+    return false
   }
 
   const getByCategory = async (cat: string) => {
-    switch (cat) {
-      case 'news':
-        return await getNews()
-        break
+    let result
 
-      case 'message':
-        return await getMessages()
-        break
-
-      case 'policy':
-        return await getPolicies()
-        break
-
-      default:
-        throw new Error("The category name should not be other than 'news', 'message', 'policy'.")
-        break
-    }
-  }
-
-  const getMessages = async () => {
-    if (!messages.value) {
-      await fetchPost('message', messages)
+    if (hasCategory(cat)) {
+      result = posts.value.filter((x) => x.category.slug === cat)
     }
 
-    return messages.value
-  }
+    const q = query(postRef, where('category.slug', '==', cat), orderBy('created', 'desc'))
 
-  const getNews = async () => {
-    if (!news.value) {
-      await fetchPost('news', news)
+    try {
+      const response = await getDocs(q)
+      const mapped = response.docs.map((x) => mapPost(x))
+
+      posts.value = posts.value ? posts.value.concat(mapped) : mapped
+      result = mapped
+    } catch (error) {
+      catcher(error)
     }
 
-    return news.value
-  }
-
-  const getPolicies = async () => {
-    if (!policies.value) {
-      await fetchPost('policy', policies)
-    }
-
-    return policies.value
+    return result
   }
 
   /**
@@ -155,9 +125,6 @@ export const usePostStore = defineStore('post', () => {
     getOne,
     updatePost,
     createPost,
-    getMessages,
-    getNews,
-    getPolicies,
     getByCategory,
     count,
     empty

@@ -12,37 +12,24 @@
     </template>
 
     <section class="mt-8 flex flex-row gap-6">
-      <button
+      <!-- <button
         :class="[
           current === 'all' ? 'rounded-full border border-red-600 bg-red-500 text-white' : '',
           'px-5 py-1'
         ]"
         @click="filter('all')"
         v-text="'All'"
-      />
+      /> -->
+
       <button
+        v-for="(cat, i) in categories"
+        :key="i"
         :class="[
-          current === 'news' ? 'rounded-full border border-red-600 bg-red-500 text-white' : '',
+          current === cat.slug ? 'rounded-full border border-red-600 bg-red-500 text-white' : '',
           'px-5 py-1'
         ]"
-        @click="filter('news')"
-        v-text="'News'"
-      />
-      <button
-        :class="[
-          current === 'message' ? 'rounded-full border border-red-600 bg-red-500 text-white' : '',
-          'px-5 py-1'
-        ]"
-        @click="filter('message')"
-        v-text="'Messages'"
-      />
-      <button
-        :class="[
-          current === 'policy' ? 'rounded-full border border-red-600 bg-red-500 text-white' : '',
-          'px-5 py-1'
-        ]"
-        @click="filter('policy')"
-        v-text="'Policies'"
+        @click="filter(cat.slug)"
+        v-text="cat.name"
       />
     </section>
 
@@ -97,13 +84,19 @@ import {
 import Layout from '@/components/Layouts/DefaultLayout.vue'
 
 import type PostType from '@/contracts/post.interface'
+import type CategoryType from '@/contracts/category.interface'
+import { useCategoryStore } from '@/stores/category'
 
-const posts = ref<Array<PostType>>()
 const postStore = usePostStore()
+const categoryStore = useCategoryStore()
+const posts = ref<Array<PostType>>()
+const categories = ref<Array<CategoryType>>()
 const current = ref('')
 
 onMounted(async () => {
-  filter('news')
+  categories.value = await categoryStore.fetch()
+
+  filter(categories.value[0].slug)
 })
 
 const filter = async (cur: string) => {
