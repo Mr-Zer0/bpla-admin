@@ -1,7 +1,7 @@
 <template>
   <Layout>
-    <section class="flex justify-between items-center">
-      <h3 class="text-3xl font-semibold">Categories</h3>
+    <template v-slot:title>
+      <h3 class="text-2xl font-semibold">Categories</h3>
 
       <router-link
         to="/categories/create"
@@ -9,38 +9,71 @@
       >
         Create
       </router-link>
-    </section>
+    </template>
 
-    <section class="bg-white mt-5 rounded-lg border border-solid border-slate-200">
-      <article
-        v-for="(cat, i) in categoryStore.categories"
+    <section class="mt-5 flex flex-col gap-2">
+      <div
+        v-for="(cat, i) in categories"
         :key="i"
-        :class="[
-          i === categories.length - 1 ? '' : 'border-b border-solid border-slate-200',
-          'px-5 py-3 flex justify-between'
-        ]"
+        class=""
       >
-        <div class="flex items-center gap-x-2.5">
-          <h3 v-text="cat.name" class="text-lg" />
-          <p
-            :class="[
-              cat.status === 'drafted' ? 'text-slate-400' : 'text-green-600',
-              'text-xs uppercase font-semibold mt-1'
-            ]"
-            v-text="cat.status"
-          />
-        </div>
+        <article class="flex justify-between px-5 py-3 bg-white rounded-lg border border-solid border-slate-200">
 
-        <div class="flex flex-wrap md:flex-nowrap items-start gap-2">
-          <router-link :to="'/categories/edit/' + cat.id">
-            <PencilSquareIcon class="w-5 text-slate-500 hover:text-slate-700" />
-          </router-link>
-          <a href=""> </a>
-          <button @click="remove(cat)">
-            <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
-          </button>
+          <div class="flex items-center gap-x-2.5">
+            <h3 v-text="cat.name" class="text-lg" />
+            <p
+              :class="[
+                cat.status === 'drafted' ? 'text-slate-400' : 'text-green-600',
+                'text-xs uppercase font-semibold mt-1'
+              ]"
+              v-text="cat.status"
+            />
+          </div>
+
+          <div class="flex flex-wrap md:flex-nowrap items-start gap-2">
+            <router-link :to="'/categories/edit/' + cat.id">
+              <PencilSquareIcon class="w-5 text-slate-500 hover:text-slate-700" />
+            </router-link>
+            <a href=""> </a>
+            <button @click="remove(cat)">
+              <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
+            </button>
+          </div>
+
+        </article>
+
+        <div class="pl-5">
+
+          <article 
+            v-for="(child, j) in cat.children"
+            :key="j"
+            class="flex justify-between px-5 py-3 bg-white rounded-lg border border-solid border-slate-200">
+
+            <div class="flex items-center gap-x-2.5">
+              <h3 v-text="child.name" class="text-lg" />
+              <p
+                :class="[
+                  cat.status === 'drafted' ? 'text-slate-400' : 'text-green-600',
+                  'text-xs uppercase font-semibold mt-1'
+                ]"
+                v-text="child.status"
+              />
+            </div>
+
+            <div class="flex flex-wrap md:flex-nowrap items-start gap-2">
+              <router-link :to="'/categories/edit/' + child.id">
+                <PencilSquareIcon class="w-5 text-slate-500 hover:text-slate-700" />
+              </router-link>
+              <a href=""> </a>
+              <button @click="remove(child)">
+                <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
+              </button>
+            </div>
+
+            </article>
+
         </div>
-      </article>
+      </div>
     </section>
   </Layout>
 </template>
@@ -49,24 +82,32 @@
 import { onMounted, ref } from 'vue'
 import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useCategoryStore } from '@/stores/category'
-import { deleteACategory } from '@/firebase/model'
 import Layout from '@/components/Layouts/DefaultLayout.vue'
 import type CategoryType from '@/contracts/category.interface'
 
-const categories = ref<Array<CategoryType>>([])
+interface HierarchyType {
+  id: string
+  name: string
+  slug: string
+  description: string
+  children?: Array<CategoryType>
+  status: string
+  created: Date
+  modified: Date
+}
+
 const categoryStore = useCategoryStore()
+const categories = ref()
 
 onMounted(async () => {
-  await categoryStore.fetch()
+  categories.value = await categoryStore.getHierarchy()
 })
 
 const remove = async (cat: CategoryType) => {
   const confirmation = confirm(`Are you sure you want to delete the category! \n "${cat.name}"`)
 
   if (confirmation) {
-    await deleteACategory(cat.id!)
-
-    categoryStore.removeACategory(cat.id!)
+    await categoryStore.remove(cat.id!)
   }
 }
 </script>

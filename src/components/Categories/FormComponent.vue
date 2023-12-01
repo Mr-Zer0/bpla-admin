@@ -1,11 +1,19 @@
 <template>
   <form @submit.prevent="submit">
-    <InputElement label="Category Name" v-model="name" name="name" @input="nameInput" />
+    <InputElement label="Name" v-model="name" name="name" @input="nameInput" :required=true />
 
-    <InputElement label="Category Slug" v-model="slug" name="slug" class="mt-5" />
+    <InputElement label="Slug" v-model="slug" name="slug" :required="true" class="mt-5" />
+
+    <option-element
+      :options="selectableRoots"
+      label="Parent"
+      name="parent"
+      v-model="parent"
+      class="mt-6"
+    />
 
     <TextElement
-      label="Category Description"
+      label="Description"
       v-model="description"
       name="description"
       class="mt-5"
@@ -14,10 +22,6 @@
     <hr class="my-10" />
 
     <div class="mt-6 flex items-center justify-end gap-x-6">
-      <a class="ext-sm font-semibold leading-6 text-gray-900 cursor-pointer" @click.prevent="draft">
-        Save Draft
-      </a>
-
       <input
         class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         type="submit"
@@ -31,8 +35,10 @@
 import router from '@/router'
 import InputElement from '@/components/Form/InputElement.vue'
 import TextElement from '@/components/Form/TextElement.vue'
+import OptionElement from '../Form/OptionElement.vue'
 import { useCategoryStore } from '@/stores/category'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import type CategoryType from '@/contracts/category.interface'
 
 const props = withDefaults(
   defineProps<{
@@ -44,23 +50,39 @@ const props = withDefaults(
   }
 )
 
-onMounted(async () => {
-  if (props.type === 'update') {
-    if (props.categoryId) {
-      getData(props.categoryId)
-    } else {
-      throw new Error('! ID NOT FOUND\nUpdate form always require the id to be updated.')
-    }
-  }
-})
-
 const id = ref<string>()
 const name = ref<string>('')
 const slug = ref<string>('')
 const description = ref<string>('')
 const status = ref('published')
+const parent = ref<string>()
 
 const categoryStore = useCategoryStore()
+const roots = ref<Array<CategoryType>>()
+
+onMounted(async () => {
+  roots.value = await categoryStore.getRoots()
+
+  if (props.categoryId) {
+    const response = await categoryStore.getById(props.categoryId)
+
+    if (response) {
+      id.value = response.id
+      name.value = response.name
+      slug.value = response.slug
+      description.value = response.description
+      parent.value = response.parent?.id
+    }
+  }
+})
+
+const selectableRoots = computed(() => {
+  if (roots.value) {
+    return roots.value.map(x => { return { text: x.name, value: x.id! }})
+  }
+  
+  return []
+})
 
 const nameInput = (e: Event) => {
   const value = (e.target as HTMLInputElement).value
@@ -68,58 +90,35 @@ const nameInput = (e: Event) => {
 }
 
 const submit = async () => {
-  console.log(
-    `Name: ${name.value}\nSlug: ${slug.value}\nDescription: ${description.value}\nStatus: ${status.value}`
-  )
-
-  if (props.type === 'update') {
-    await update()
+  if (props.categoryId) {
+    await categoryStore.update(props.categoryId, makePayload())
   } else {
-    await create()
+    await categoryStore.insert(makePayload())
   }
-
-  await categoryStore.fetch(true)
 
   return router.push('/categories')
 }
 
-const draft = async () => {
-  status.value = 'drafted'
-
-  await submit()
-
-  status.value = 'published'
-}
-
-const create = async () => {
-  await categoryStore.create({
+const makePayload = () => {
+  const payload:CategoryType = {
     name: name.value,
-    slug: encodeURIComponent(slug.value),
+    slug: slug.value,
     description: description.value,
     status: status.value
-  })
-}
-
-const update = async () => {
-  if (props.categoryId) {
-    await categoryStore.update(props.categoryId, {
-      name: name.value,
-      slug: encodeURIComponent(slug.value),
-      description: description.value,
-      status: status.value
-    })
   }
-}
 
-const getData = async (catId: string) => {
-  const category = await categoryStore.get(catId)
+  if (parent.value && roots.value) {
+    const temp = roots.value.find(x => x.id === parent.value)
 
-  if (category) {
-    id.value = category.id!
-    name.value = category.name
-    slug.value = category.slug
-    description.value = category.description
-    // status.value = category.status
+    if (temp) {
+      payload.parent = {
+        id: temp.id!,
+        slug: temp.slug,
+        name: temp.name
+      }
+    }
   }
+
+  return payload
 }
 </script>
