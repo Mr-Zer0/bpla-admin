@@ -12,13 +12,10 @@
     </template>
 
     <section class="mt-5 flex flex-col gap-2">
-      <div
-        v-for="(cat, i) in categories"
-        :key="i"
-        class=""
-      >
-        <article class="flex justify-between px-5 py-3 bg-white rounded-lg border border-solid border-slate-200">
-
+      <div v-for="(cat, i) in categories" :key="i" class="">
+        <article
+          class="flex justify-between px-5 py-3 bg-white rounded-lg border border-solid border-slate-200"
+        >
           <div class="flex items-center gap-x-2.5">
             <h3 v-text="cat.name" class="text-lg" />
             <p
@@ -39,16 +36,14 @@
               <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
             </button>
           </div>
-
         </article>
 
         <div class="pl-5">
-
-          <article 
+          <article
             v-for="(child, j) in cat.children"
             :key="j"
-            class="flex justify-between px-5 py-3 bg-white rounded-lg border border-solid border-slate-200">
-
+            class="flex justify-between px-5 py-3 bg-white rounded-lg border border-solid border-slate-200"
+          >
             <div class="flex items-center gap-x-2.5">
               <h3 v-text="child.name" class="text-lg" />
               <p
@@ -69,9 +64,7 @@
                 <TrashIcon class="w-5 h-5 text-slate-500 hover:text-slate-700" />
               </button>
             </div>
-
-            </article>
-
+          </article>
         </div>
       </div>
     </section>
@@ -84,17 +77,6 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useCategoryStore } from '@/stores/category'
 import Layout from '@/components/Layouts/DefaultLayout.vue'
 import type CategoryType from '@/contracts/category.interface'
-
-interface HierarchyType {
-  id: string
-  name: string
-  slug: string
-  description: string
-  children?: Array<CategoryType>
-  status: string
-  created: Date
-  modified: Date
-}
 
 const categoryStore = useCategoryStore()
 const categories = ref()

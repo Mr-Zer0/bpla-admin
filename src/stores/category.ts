@@ -1,10 +1,20 @@
-import type CategoryType from "@/contracts/category.interface"
-import type { DocumentSnapshot, QueryDocumentSnapshot } from "firebase/firestore"
-import { db } from "@/firebase"
-import { catcher } from "@/util";
-import { Timestamp, addDoc, collection, doc, getDoc, getDocs, orderBy, query, setDoc } from "firebase/firestore";
-import { defineStore } from "pinia";
-import { ref } from "vue";
+import type CategoryType from '@/contracts/category.interface'
+import type { DocumentSnapshot, QueryDocumentSnapshot } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { catcher } from '@/util'
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  setDoc
+} from 'firebase/firestore'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const useCategoryStore = defineStore('category', () => {
   const categories = ref<Array<CategoryType>>()
@@ -17,15 +27,14 @@ export const useCategoryStore = defineStore('category', () => {
 
     try {
       const result = await getDocs(q)
-      categories.value = result.docs.map(x => mapCategory(x))
-
+      categories.value = result.docs.map((x) => mapCategory(x))
     } catch (error) {
       catcher(error)
     }
   }
 
   const getAll = async () => {
-    if (! categories.value) {
+    if (!categories.value) {
       await fetch()
     }
 
@@ -33,40 +42,39 @@ export const useCategoryStore = defineStore('category', () => {
   }
 
   const getRoots = async () => {
-    if (! categories.value) {
+    if (!categories.value) {
       await fetch()
     }
 
     return categories.value
-      ? categories.value.filter(x => !Object.prototype.hasOwnProperty.call(x, 'parent'))
+      ? categories.value.filter((x) => !Object.prototype.hasOwnProperty.call(x, 'parent'))
       : []
   }
 
   const getHierarchy = async () => {
     const all = await getAll()
     const roots = await getRoots()
-    const result = roots.map(x => { return {...x, children: <Array<CategoryType>>[]} })
+    const result = roots.map((x) => {
+      return { ...x, children: <Array<CategoryType>>[] }
+    })
 
     if (all) {
-      all.map(x => {
+      all.map((x) => {
         if (Object.prototype.hasOwnProperty.call(x, 'parent')) {
-          const index = result.findIndex(i => i.id === x.parent?.id)
+          const index = result.findIndex((i) => i.id === x.parent?.id)
           result[index].children.push(x)
         }
       })
     }
 
     return result
-
   }
 
-  const getByParent = async (parent: string) => {
-
-  }
+  const getByParent = async (parent: string) => {}
 
   const getById = async (id: string) => {
     if (categories.value) {
-      return  categories.value.find(x => x.id === id)
+      return categories.value.find((x) => x.id === id)
     }
 
     const docSnap = await getDoc(doc(db, coll, id))
@@ -83,7 +91,6 @@ export const useCategoryStore = defineStore('category', () => {
       if (categories.value) {
         categories.value.push(payload)
       }
-
     } catch (error) {
       catcher(error)
     }
@@ -93,25 +100,32 @@ export const useCategoryStore = defineStore('category', () => {
     payload.modified = Timestamp.now()
 
     try {
-
       await setDoc(doc(db, coll, id), payload, { merge: true })
 
       if (categories.value) {
-        const index = categories.value.findIndex(x => x.id === id)
+        const index = categories.value.findIndex((x) => x.id === id)
 
-        categories.value[index] = {...categories.value[index], ...payload}
+        categories.value[index] = { ...categories.value[index], ...payload }
       }
-
     } catch (error) {
       catcher(error)
     }
   }
 
-  const remove = async (id: string) => {
+  const remove = async (id: string) => {}
 
+  return {
+    categories,
+    roots,
+    getAll,
+    getRoots,
+    getByParent,
+    getById,
+    insert,
+    update,
+    remove,
+    getHierarchy
   }
-
-  return { categories, roots, getAll, getRoots, getByParent, getById, insert, update, remove, getHierarchy }
 })
 
 /**
@@ -121,7 +135,7 @@ export const useCategoryStore = defineStore('category', () => {
  */
 const mapCategory = (x: DocumentSnapshot): CategoryType => {
   const data = x.data()
-  let result:CategoryType
+  let result: CategoryType
 
   if (data) {
     result = {
@@ -135,7 +149,9 @@ const mapCategory = (x: DocumentSnapshot): CategoryType => {
       modified: data.modified.toDate()
     }
 
-    if (data.parent) { result.parent = data.parent }
+    if (data.parent) {
+      result.parent = data.parent
+    }
   } else {
     result = {
       id: x.id,

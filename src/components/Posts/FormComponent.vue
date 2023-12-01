@@ -14,7 +14,7 @@
           name="category"
           label="Post Category"
           class="mt-5"
-          :options="catList"
+          :options="selectableCategory"
           v-model="category"
         />
 
@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { usePostStore } from '@/stores/post'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -132,12 +132,6 @@ const category = ref('')
 const status = ref('published')
 
 const categories = ref<Array<CategoryType>>()
-const catList = ref<
-  Array<{
-    value: string
-    text: string
-  }>
->([])
 
 const titleInput = (e: Event) => {
   if (props.type === 'create') {
@@ -149,10 +143,7 @@ const titleInput = (e: Event) => {
 }
 
 onMounted(async () => {
-  categories.value = await categoryStore.fetch()
-  catList.value = categories.value.map((x) => {
-    return { value: x.id!, text: x.name }
-  })
+  categories.value = await categoryStore.getAll()
 
   if (props.uid) {
     formSubmit.value = 'Update'
@@ -200,6 +191,16 @@ if (props.type === 'create') {
     }
   })
 }
+
+const selectableCategory = computed(() => {
+  if (categories.value) {
+    return categories.value.map((x) => {
+      return { text: x.name, value: x.id! }
+    })
+  }
+
+  return []
+})
 
 const submit = async () => {
   const result = categories.value?.find(({ id }) => id === category.value)

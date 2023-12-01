@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="submit">
-    <InputElement label="Name" v-model="name" name="name" @input="nameInput" :required=true />
+    <InputElement label="Name" v-model="name" name="name" @input="nameInput" :required="true" />
 
     <InputElement label="Slug" v-model="slug" name="slug" :required="true" class="mt-5" />
 
@@ -12,12 +12,7 @@
       class="mt-6"
     />
 
-    <TextElement
-      label="Description"
-      v-model="description"
-      name="description"
-      class="mt-5"
-    />
+    <TextElement label="Description" v-model="description" name="description" class="mt-5" />
 
     <hr class="my-10" />
 
@@ -78,9 +73,11 @@ onMounted(async () => {
 
 const selectableRoots = computed(() => {
   if (roots.value) {
-    return roots.value.map(x => { return { text: x.name, value: x.id! }})
+    return roots.value.map((x) => {
+      return { text: x.name, value: x.id! }
+    })
   }
-  
+
   return []
 })
 
@@ -100,7 +97,7 @@ const submit = async () => {
 }
 
 const makePayload = () => {
-  const payload:CategoryType = {
+  const payload: CategoryType = {
     name: name.value,
     slug: slug.value,
     description: description.value,
@@ -108,7 +105,7 @@ const makePayload = () => {
   }
 
   if (parent.value && roots.value) {
-    const temp = roots.value.find(x => x.id === parent.value)
+    const temp = roots.value.find((x) => x.id === parent.value)
 
     if (temp) {
       payload.parent = {

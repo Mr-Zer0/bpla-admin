@@ -94,7 +94,7 @@ const categories = ref<Array<CategoryType>>()
 const current = ref('')
 
 onMounted(async () => {
-  categories.value = await categoryStore.fetch()
+  categories.value = await categoryStore.getRoots()
 
   filter(categories.value[0].slug)
 })
