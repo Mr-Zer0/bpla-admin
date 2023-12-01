@@ -9,7 +9,5 @@ const config = {
 
 const app = initializeApp(config)
 
-console.log('===! Firebase App Initialized !===')
-
 export const auth = getAuth(app)
 export const db = getFirestore(app)

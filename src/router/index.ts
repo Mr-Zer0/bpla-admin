@@ -127,8 +127,6 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  console.log(' ===! Routher loaded !===')
-
   const authStore = useAuthStore()
 
   const user = authStore.user ? authStore.user : await currentUser()
